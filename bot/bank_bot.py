@@ -5,6 +5,8 @@ import subprocess
 import psutil
 import threading
 import os
+import re
+from django.conf import settings
         
         
 project_root = "/home/satyammittal/SanimaBots"
@@ -45,34 +47,141 @@ class Database:
         response = self.database.get_bot_by_name(bot_name)
 
         return response
+    def collect_dependencies(self, module_path, files, visited):
+
+        if module_path in visited:
+            return
+
+        visited.add(module_path)
+
+        if module_path not in files:
+            files.append(module_path)
+
+        absolute_path = os.path.join(
+            settings.BOT_STORAGE_PATH,
+            module_path
+        )
+
+        if not os.path.exists(absolute_path):
+            return
+
+        with open(absolute_path, "r") as f:
+            code = f.read()
+
+        pattern = r"from\s+([A-Za-z0-9_.]+)\s+import"
+
+        imports = re.findall(
+            pattern,
+            code
+        )
+
+        for module in imports:
+
+            if module.startswith("TestHelper."):
+
+                next_file = (
+                    module.replace(
+                        ".",
+                        "/"
+                    )
+                    + ".py"
+                )
+
+                self.collect_dependencies(
+                    next_file,
+                    files,
+                    visited
+                )
     def get_bot_code(self, bot_name):
 
         bot = self.get_bot_by_name(bot_name)
 
-        if "script_path" not in bot:
-            return bot
+        bot_folder = bot["script_path"]
 
-        file_path = os.path.join(
-            bot["script_path"],
-            "main.py"
+        files = []
+
+        # ------------------------
+        # Add bot files
+        # ------------------------
+
+        for root, dirs, filenames in os.walk(bot_folder):
+
+            for filename in filenames:
+
+                full_path = os.path.join(root, filename)
+
+                relative_path = os.path.relpath(
+                    full_path,
+                    bot_folder
+                )
+
+                files.append(relative_path)
+
+        # ------------------------
+        # Read main.py
+        # ------------------------
+
+        with open(
+            os.path.join(bot_folder, "main.py"),
+            "r"
+        ) as f:
+
+            code = f.read()
+
+        # ------------------------
+        # Find imported modules
+        # ------------------------
+
+        visited = set()
+
+        pattern = r"from\s+([A-Za-z0-9_.]+)\s+import"
+
+        imports = re.findall(
+            pattern,
+            code
         )
 
-        try:
+        for module in imports:
 
-            with open(file_path, "r") as file:
-                code = file.read()
+            if module.startswith("TestHelper."):
 
-            return {
-                "status": "success",
-                "code": code
-            }
+                file_name = (
+                    module.replace(
+                        ".",
+                        "/"
+                    )
+                    + ".py"
+                )
 
-        except Exception as e:
+                self.collect_dependencies(
+                    file_name,
+                    files,
+                    visited
+                )
 
-            return {
-                "status": "error",
-                "description": str(e)
-            }
+        # ------------------------
+        # Prepare files for UI
+        # ------------------------
+
+        display_files = []
+
+        for file in files:
+
+            depth = file.count("/")
+
+            display_files.append(
+                {
+                    "path": file,
+                    "name": os.path.basename(file),
+                    "depth": depth
+                }
+            )
+
+        return {
+            "files": display_files,
+            "code": code,
+            "selected_file": "main.py"
+        }
 
 
 class Bot:

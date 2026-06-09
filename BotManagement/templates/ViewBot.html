@@ -171,30 +171,60 @@
                     </div>
 
                     <section class="row g-3">
-                        <div class="col-12 col-xl-8">
-                            <form id="EditBotForm">
-                                <div class="col-md-6">
-                                    <label class="form-label">Bot Name</label>
-                                    <input class="form-control" id="BotName" type="text" value="{{bot_name}}" readonly>
-                                </div>
 
-                                <div class="col-12">
-                                    <label class="form-label">Bot Code</label>
+                        <!-- File Explorer -->
+                        <div class="card p-3">
 
-                                        <textarea class="form-control font-monospace" id="BotCode" style="
-                                            width:100%;
-                                            height:600px;
-                                            font-size:15px;
-                                            resize:vertical;
-                                        ">{{code}}</textarea>
-                                </div>
+                            <h5>Files</h5>
 
-                                <button class="btn btn-primary mt-3" type="submit">
-                                    Edit Bot
+                            <div class="list-group">
+
+                                {% for file in files %}
+                                <button type="button" class="list-group-item list-group-item-action file-btn"
+                                    data-file="{{ file.path }}">
+
+                                    <span style="font-family: monospace;" class="ps-{{ file.depth }}">
+                                        {{ file.name }}
+                                    </span>
+
                                 </button>
-                            </form>
+                                {% endfor %}
+                            </div>
 
                         </div>
+
+                        <!-- Code -->
+                        <form id="EditBotForm">
+
+                            <input type="hidden" id="CurrentFile" value="{{ selected_file }}">
+
+                            <div class="mb-3">
+                                <label class="form-label">Bot Name</label>
+
+                                <input class="form-control" id="BotName" type="text" value="{{bot_name}}" readonly>
+                            </div>
+
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    {{ selected_file }}
+                                </label>
+
+                                <textarea class="form-control font-monospace" id="BotCode" style="
+                width:100%;
+                height:700px;
+                font-size:15px;
+                resize:vertical;
+            ">{{code}}</textarea>
+
+                            </div>
+
+                            <button class="btn btn-primary" type="submit">
+                                Edit Bot
+                            </button>
+
+                        </form>
+
                     </section>
                 </div>
             </main>

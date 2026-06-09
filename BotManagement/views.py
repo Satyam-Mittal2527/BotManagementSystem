@@ -42,7 +42,9 @@ def ViewBotCode(request):
 
         context = {
             "bot_name": bot_name,
-            "code": response["code"]
+            "files": response["files"],
+            "code": response["code"],
+            "selected_file": response["selected_file"]
         }
 
         return render(
@@ -60,7 +62,52 @@ def ViewBotCode(request):
                 "error": str(e)
             }
         )
+def ViewFile(request):
 
+    try:
+
+        data = json.loads(request.body)
+
+        bot_name = data["bot_name"]
+        file_name = data["file_name"]
+
+        bot = Database()
+
+        bot_data = bot.get_bot_by_name(bot_name)
+
+        if file_name.startswith("TestHelper/"):
+
+            file_path = os.path.join(
+                settings.BOT_STORAGE_PATH,
+                file_name
+            )
+
+        else:
+
+            file_path = os.path.join(
+                bot_data["script_path"],
+                file_name
+            )
+
+        with open(file_path, "r") as f:
+
+            code = f.read()
+
+        return JsonResponse(
+            {
+                "status": "success",
+                "code": code
+            }
+        )
+
+    except Exception as e:
+
+        return JsonResponse(
+            {
+                "status": "error",
+                "description": str(e)
+            }
+        )
 def profilePage(request):
     return render(request, "profile.html")
 def EditBotPage(request):
@@ -73,10 +120,12 @@ def EditBot(request):
 
         bot_name = request.POST["bot_name"]
         bot_code = request.POST["bot_code"]
+        file_name = request.POST["file_name"]
 
         bots = bot.get_bot_by_name(bot_name)
 
         if "script_path" not in bots:
+
             return JsonResponse(
                 {
                     "status": "error",
@@ -84,12 +133,22 @@ def EditBot(request):
                 }
             )
 
-        file_path = os.path.join(
-            bots["script_path"],
-            "main.py"
-        )
+        if file_name.startswith("TestHelper/"):
+
+            file_path = os.path.join(
+                settings.BOT_STORAGE_PATH,
+                file_name
+            )
+
+        else:
+
+            file_path = os.path.join(
+                bots["script_path"],
+                file_name
+            )
 
         with open(file_path, "w") as file:
+
             file.write(bot_code)
 
         return JsonResponse(
