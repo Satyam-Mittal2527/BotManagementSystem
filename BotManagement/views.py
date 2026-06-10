@@ -4,6 +4,7 @@ from bot.bank_bot import Bot
 from django.http import JsonResponse
 import json
 import os
+import shutil
 from django.conf import settings
 
 
@@ -27,7 +28,24 @@ def botPage(request):
         "bot_page.html",
         context
     )
+def DeleteBotPage(request):
+    deleted_path = settings.DELETED_BOT_STORAGE_PATH
 
+    deleted_bots = []
+
+    for item in os.listdir(deleted_path):
+        full_path = os.path.join(deleted_path, item)
+
+        if os.path.isdir(full_path):
+            deleted_bots.append(item)
+
+    print(deleted_bots)
+
+    context = {
+    "deleted_bots": deleted_bots
+    }
+
+    return render(request, "deleted_bots.html", context)
 def ViewBotCode(request):
 
     try:
@@ -112,6 +130,8 @@ def profilePage(request):
     return render(request, "profile.html")
 def EditBotPage(request):
     return render(request, "EditBot.html")
+def UserPage(request):
+    return render(request, "users.html")
 def EditBot(request):
 
     bot = Database()
@@ -332,3 +352,51 @@ def logDetails(request, runId):
     response  =dataBase.view_logs(runId)
 
     return render(request, "logDetails.html", response)
+def DeleteBot(request):
+    try:
+        bot_name = request.POST["bot_name"]
+        
+        bot = Database()
+
+        bot_data = bot.get_bot_by_name(bot_name)
+        
+
+        if bot_data.get("status") == "Error":
+            return JsonResponse(bot_data)
+
+        bot_id = bot_data["id"]
+        source = script_path = bot_data["script_path"]
+        
+
+        # destination = os.path.join(
+        #     settings.DELETED_BOT_STORAGE_PATH,
+        #     os.path.basename(source)
+        # )
+
+        # shutil.move(source, destination)
+
+        runs_data = bot.view_runs(bot_id)
+        for run in runs_data["bots"]:
+            run_id = run["id"]
+            DeleteLogResponse = bot.delete_logs(run_id)
+            print("Response fron delete Logs:", DeleteLogResponse)
+            
+
+        DeleteRunsResponse  = bot.delete_runs(bot_id)
+
+        print("Response fron delete Logs:", DeleteLogResponse)
+
+        DeleteBots = bot.delete_bots(bot_name)
+
+        print("Response from delete Bots", DeleteBots)
+
+        return JsonResponse({
+            "status" : "Delete Complete",
+            "description" : "Bot Deleted SUccessfully"
+        })
+    except Exception as e:
+        return JsonResponse({
+            "status" : "Delete Failed",
+            "description" : str(e)
+        })
+

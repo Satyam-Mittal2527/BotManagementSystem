@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import include, path
-from .views import home, botPage, addBot, NewBot, EditBotPage
-from .views import runBot, stopBot, botRunDetails, profilePage, logDetails, EditBot, ViewBotCode, ViewFile
+from .views import home, botPage, addBot, NewBot, EditBotPage , UserPage, DeleteBotPage
+from .views import runBot, stopBot, botRunDetails, profilePage, logDetails, EditBot, ViewBotCode, ViewFile,DeleteBot
+
 print("Add bot calling")
 urlpatterns = [
     path('', home),
@@ -16,5 +17,8 @@ urlpatterns = [
     path('EditBot', EditBotPage),
     path('api/EditBot', EditBot),
     path('api/viewBot', ViewBotCode),
-    path('api/viewFile', ViewFile)
+    path('api/viewFile', ViewFile),
+    path('users', UserPage),
+    path('api/DeleteBot', DeleteBot),
+    path('DeleteBot', DeleteBotPage)
 ]

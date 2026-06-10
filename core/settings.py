@@ -119,3 +119,4 @@ STATIC_URL = 'static/'
 
 
 BOT_STORAGE_PATH = "/home/satyammittal/SanimaBots"
+DELETED_BOT_STORAGE_PATH = "/home/satyammittal/SanimaDeletedBots"

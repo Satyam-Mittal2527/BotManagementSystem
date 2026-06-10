@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="adminHMD professional admin dashboard template">
-    <title>SANIMA BANK | View Bot</title>
+    <title>SANIMA BANK | USERS</title>
 
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/bootstrap-icons/bootstrap-icons.css' %}">
@@ -20,7 +20,7 @@
 
         <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
             <div class="sidebar-header">
-                <a class="brand-mark" href="/" aria-label="adminHMD dashboard">
+                <a class="brand-mark" href="index.html" aria-label="adminHMD dashboard">
                     <span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span>
                     <span class="brand-copy">
                         <span class="brand-title">SANIMA BOT</span>
@@ -30,11 +30,11 @@
             </div>
 
             <nav class="sidebar-nav">
-                <a class="nav-link" href="/">
+                <a class="nav-link" href="/" aria-current="page">
                     <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
                     <span class="nav-text">Dashboard</span>
                 </a>
-                <a class="nav-link active" href="/botPage">
+                <a class="nav-link" href="/botPage">
                     <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
                     <span class="nav-text">Bots</span>
                 </a>
@@ -46,7 +46,7 @@
                     <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
                     <span class="nav-text">Profile</span>
                 </a>
-                <a class="nav-link" href="/users">
+                <a class="nav-link active" href="/users">
                     <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
                     <span class="nav-text">Users</span>
                 </a>
@@ -144,7 +144,7 @@
                                 <span class="profile-name d-none d-sm-inline">Admin Hasan</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="/profile">Profile</a></li>
+                                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
                                 <li><a class="dropdown-item" href="settings.html">Account settings</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -160,67 +160,99 @@
                 <div class="container-fluid px-3 px-lg-4 py-4">
                     <div class="page-heading">
                         <div class="page-heading-copy">
-                            <span class="page-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
+                            <span class="page-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
                             <div>
-                                <p class="eyebrow mb-1">Bots Management</p>
-                                <h1 class="h3 mb-1">Edit Bots</h1>
+                                <p class="eyebrow mb-1">Data</p>
+                                <h1 class="h3 mb-1">Tables</h1>
+                                <p class="text-muted mb-0">Use responsive, searchable tables for operational records.
+                                </p>
                             </div>
                         </div>
-                        <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="/botPage"><i
-                                    class="bi bi-arrow-left" aria-hidden="true"></i> Back to Bots</a></div>
+
                     </div>
 
-                    <section class="row g-3" style="display: flex; flex-direction: row; flex-wrap:nowrap;">
-
-                        <!-- File Explorer -->
-                        <div class="card p-3" style="width: fit-content; height: fit-content;">
-
-                            <h5>Files</h5>
-
-                            <div class="list-group">
-                                {% for file in files %}
-                                <button type="button" class="list-group-item list-group-item-action file-btn"
-                                    data-file="{{ file.path }}">
-
-                                    <span style="font-family: monospace;">
-                                        {% for i in "x"|rjust:file.depth %}
-                                        │&nbsp;&nbsp;&nbsp;
-                                        {% endfor %}
-                                        ├── 📄 {{ file.name }}
-                                    </span>
-
-                                </button>
-                                {% endfor %}
-                            </div>
+                    <section class="panel">
+                        <div class="panel-header">
+                            <div>
+                                <h2 class="h5 mb-1 section-title"><i class="bi bi-table"
+                                        aria-hidden="true"></i><span>Advanced Table</span></h2>
+                                <p class="text-muted mb-0">Searchable responsive table for orders and customer data.</p>
+                            </div><input class="form-control form-control-sm table-search" type="search"
+                                placeholder="Search orders" data-table-search="ordersTable" aria-label="Search orders">
                         </div>
-
-                        <!-- Code -->
-                        <form id="EditBotForm" style="width: 70%;">
-
-                            <input type="hidden" id="CurrentFile" value="{{ selected_file }}">
-
-                            <div class="mb-3">
-                                <label class="form-label">Bot Name</label>
-
-                                <input class="form-control" id="BotName" type="text" value="{{bot_name}}" readonly>
-                            </div>
-
-                            <div class="mb-3">
-                                <textarea class="form-control font-monospace" id="BotCode" style="
-                width:100%;
-                height:700px;
-                font-size:15px;
-                resize:vertical;
-            ">{{code}}</textarea>
-
-                            </div>
-
-                            <button class="btn btn-primary" type="submit">
-                                Edit Bot
-                            </button>
-
-                        </form>
-
+                        <div class="table-responsive">
+                            <table class="table align-middle mb-0" id="ordersTable" data-searchable-table>
+                                <thead>
+                                    <tr>
+                                        <th>Order</th>
+                                        <th>Product</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="fw-semibold">#HMD-2048</td>
+                                        <td>
+                                            <div class="table-media"><img class="product-thumb"
+                                                    src="../assets/images/ecommerce/product-1.jpg"
+                                                    alt="Wireless Headset"><span>Wireless Headset</span></div>
+                                        </td>
+                                        <td>Sarah Ahmed</td>
+                                        <td><span class="badge text-bg-success">Paid</span></td>
+                                        <td>$1,240</td>
+                                        <td>May 6, 2026</td>
+                                        <td class="text-end"><button class="btn btn-light btn-sm"
+                                                type="button">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">#HMD-2047</td>
+                                        <td>
+                                            <div class="table-media"><img class="product-thumb"
+                                                    src="../assets/images/ecommerce/product-2.jpg"
+                                                    alt="Smart Watch"><span>Smart Watch</span></div>
+                                        </td>
+                                        <td>Rafi Khan</td>
+                                        <td><span class="badge text-bg-warning">Pending</span></td>
+                                        <td>$860</td>
+                                        <td>May 5, 2026</td>
+                                        <td class="text-end"><button class="btn btn-light btn-sm"
+                                                type="button">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">#HMD-2046</td>
+                                        <td>
+                                            <div class="table-media"><img class="product-thumb"
+                                                    src="../assets/images/ecommerce/product-3.jpg"
+                                                    alt="Desk Lamp"><span>Desk Lamp</span></div>
+                                        </td>
+                                        <td>Nadia Islam</td>
+                                        <td><span class="badge text-bg-info">Shipped</span></td>
+                                        <td>$430</td>
+                                        <td>May 3, 2026</td>
+                                        <td class="text-end"><button class="btn btn-light btn-sm"
+                                                type="button">View</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="fw-semibold">#HMD-2045</td>
+                                        <td>
+                                            <div class="table-media"><img class="product-thumb"
+                                                    src="../assets/images/ecommerce/product-4.jpg"
+                                                    alt="Travel Backpack"><span>Travel Backpack</span></div>
+                                        </td>
+                                        <td>Mina Torres</td>
+                                        <td><span class="badge text-bg-danger">Failed</span></td>
+                                        <td>$220</td>
+                                        <td>May 2, 2026</td>
+                                        <td class="text-end"><button class="btn btn-light btn-sm"
+                                                type="button">View</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </section>
                 </div>
             </main>
@@ -233,7 +265,7 @@
         </div>
     </div>
 
-    <script src="{% static 'assets/js/EditBot.js' %}"></script>
+
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
 </body>

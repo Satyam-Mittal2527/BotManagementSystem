@@ -60,7 +60,26 @@ class DatabaseModule:
         finally:
             cursor.close()
             conn.close()
-            
+    def delete_bots(self, botName):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        sql = """
+            DELETE FROM BOTS WHERE 
+            bot_name = %s
+        """
+
+        try:
+            cursor.execute(sql, (botName,))
+            conn.commit()
+
+            return "Deleted Bot"
+        except Exception as e:
+            return str(e)
+        finally:
+            cursor.close()
+            conn.close()      
     def get_bot_toRun(self, botId):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -170,7 +189,26 @@ class DatabaseModule:
         finally:
             cursor.close()
             conn.close()
-            
+    def delete_logs(self, runId):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        sql = """
+            DELETE FROM BOT_LOGS WHERE 
+            run_id = %s
+        """
+
+        try:
+            cursor.execute(sql, (runId,))
+            conn.commit()
+
+            return "Deleted Logs"
+        except Exception as e:
+            return str(e)
+        finally:
+            cursor.close()
+            conn.close()
     def view_runs(self, botId):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -237,7 +275,26 @@ class DatabaseModule:
         finally:
             cursor.close()
             conn.close()
-            
+    def delete_runs(self, botId):
+
+        conn = self.get_connection()
+        cursor = conn.cursor()
+
+        sql = """
+            DELETE FROM BOT_RUNS WHERE 
+            bot_id = %s
+        """
+
+        try:
+            cursor.execute(sql, (botId,))
+            conn.commit()
+
+            return "Deleted Runs"
+        except Exception as e:
+            return str(e)
+        finally:
+            cursor.close()
+            conn.close()  
     def update_run(self, runID, status):
         conn = self.get_connection()
         cursor = conn.cursor()

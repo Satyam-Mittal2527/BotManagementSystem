@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="adminHMD professional admin dashboard template">
-    <title>SANIMA BANK | View Bot</title>
+    <title>SANIMA BANK | Add Bot</title>
 
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/bootstrap-icons/bootstrap-icons.css' %}">
@@ -34,7 +34,7 @@
                     <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
                     <span class="nav-text">Dashboard</span>
                 </a>
-                <a class="nav-link active" href="/botPage">
+                <a class="nav-link" href="/botPage">
                     <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
                     <span class="nav-text">Bots</span>
                 </a>
@@ -163,65 +163,53 @@
                             <span class="page-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
                             <div>
                                 <p class="eyebrow mb-1">Bots Management</p>
-                                <h1 class="h3 mb-1">Edit Bots</h1>
+                                <h1 class="h3 mb-1">Delete Bots</h1>
                             </div>
                         </div>
                         <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="/botPage"><i
                                     class="bi bi-arrow-left" aria-hidden="true"></i> Back to Bots</a></div>
                     </div>
 
-                    <section class="row g-3" style="display: flex; flex-direction: row; flex-wrap:nowrap;">
+                    <section class="row g-3">
+                        <div class="col-12 col-xl-8">
+                            <form id="DeleteBotForm">
+                                <div class="row g-3">
 
-                        <!-- File Explorer -->
-                        <div class="card p-3" style="width: fit-content; height: fit-content;">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Bot name</label>
+                                        <input class="form-control" id="BotName" type="text" required>
+                                    </div>
 
-                            <h5>Files</h5>
+                                </div>
 
-                            <div class="list-group">
-                                {% for file in files %}
-                                <button type="button" class="list-group-item list-group-item-action file-btn"
-                                    data-file="{{ file.path }}">
-
-                                    <span style="font-family: monospace;">
-                                        {% for i in "x"|rjust:file.depth %}
-                                        │&nbsp;&nbsp;&nbsp;
-                                        {% endfor %}
-                                        ├── 📄 {{ file.name }}
-                                    </span>
-
+                                <button class="btn btn-primary mt-3" type="submit">
+                                    Delete Bot
                                 </button>
-                                {% endfor %}
-                            </div>
+                            </form>
+
                         </div>
-
-                        <!-- Code -->
-                        <form id="EditBotForm" style="width: 70%;">
-
-                            <input type="hidden" id="CurrentFile" value="{{ selected_file }}">
-
-                            <div class="mb-3">
-                                <label class="form-label">Bot Name</label>
-
-                                <input class="form-control" id="BotName" type="text" value="{{bot_name}}" readonly>
-                            </div>
-
-                            <div class="mb-3">
-                                <textarea class="form-control font-monospace" id="BotCode" style="
-                width:100%;
-                height:700px;
-                font-size:15px;
-                resize:vertical;
-            ">{{code}}</textarea>
-
-                            </div>
-
-                            <button class="btn btn-primary" type="submit">
-                                Edit Bot
-                            </button>
-
-                        </form>
-
                     </section>
+                    <div class="deleted-section mt-5">
+                        <h4 class="mb-3">
+                            <i class="bi bi-trash"></i>
+                            Recently Deleted Bots
+                        </h4>
+
+                        <div class="deleted-bot-list">
+                            {% for bot in deleted_bots %}
+                            <div class="deleted-bot-card">
+                                <div class="bot-info">
+                                    <i class="bi bi-robot"></i>
+                                    <span>{{ bot }}</span>
+                                </div>
+                            </div>
+                            {% empty %}
+                            <div class="empty-state">
+                                No deleted bots found.
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
             </main>
 
@@ -233,7 +221,7 @@
         </div>
     </div>
 
-    <script src="{% static 'assets/js/EditBot.js' %}"></script>
+    <script src="{% static 'assets/js/DeleteBot.js' %}"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
 </body>

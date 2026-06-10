@@ -24,7 +24,12 @@ class Database:
     def Add_bot(self, package):
         response = self.database.insert_bot(package)
         return response
-        
+
+    def delete_bots(self, botName):
+
+        response = self.database.delete_bots(botName)
+
+        return response
     def get_bots(self):
 
         response = self.database.get_bots()
@@ -36,10 +41,20 @@ class Database:
         response = self.database.view_runs(botId)
 
         return response
+    def delete_runs(self, botId):
 
+        response = self.database.delete_runs(botId)
+
+        return response
     def view_logs(self, runId):
 
         response = self.database.view_logs(runId)
+
+        return response
+
+    def delete_logs(self, runId):
+
+        response = self.database.delete_logs(runId)
 
         return response
     def get_bot_by_name(self, bot_name):
