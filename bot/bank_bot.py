@@ -35,7 +35,16 @@ class Database:
         response = self.database.get_bots()
         print(response)
         return response
+    def get_active_bots(self):
 
+        response = self.database.get_active_bots()
+    
+        return response['COUNT(*)']
+    def get_inactive_bots(self):
+
+        response = self.database.get_inactive_bots()
+
+        return response['COUNT(*)']
     def view_runs(self, botId):
         
         response = self.database.view_runs(botId)
@@ -60,6 +69,11 @@ class Database:
     def get_bot_by_name(self, bot_name):
 
         response = self.database.get_bot_by_name(bot_name)
+
+        return response
+    def get_full_botDetails(self):
+
+        response = self.database.get_full_botDetails()
 
         return response
     def collect_dependencies(self, module_path, files, visited):

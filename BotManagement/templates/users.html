@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="adminHMD professional admin dashboard template">
     <title>SANIMA BANK | USERS</title>
-
+    <link rel="icon" type="image/png" href="{% static 'assets/images/favicon.png' %}">
     <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'assets/bootstrap-icons/bootstrap-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
@@ -20,8 +20,10 @@
 
         <aside class="admin-sidebar" id="adminSidebar" aria-label="Main navigation">
             <div class="sidebar-header">
-                <a class="brand-mark" href="index.html" aria-label="adminHMD dashboard">
-                    <span class="brand-icon"><i class="bi bi-grid-1x2-fill" aria-hidden="true"></i></span>
+                <a class="brand-mark" href="/" aria-label="adminHMD dashboard">
+                    <div class="brand-logo">
+                        <img class="company-logo" src="{% static 'assets/images/logo.jpeg' %}" alt="Sanima Logo">
+                    </div>
                     <span class="brand-copy">
                         <span class="brand-title">SANIMA BOT</span>
                         <span class="brand-subtitle">SANIMA BOT</span>
@@ -30,10 +32,10 @@
             </div>
 
             <nav class="sidebar-nav">
-                <a class="nav-link" href="/" aria-current="page">
+                <!-- <a class="nav-link" href="/" aria-current="page">
                     <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
                     <span class="nav-text">Dashboard</span>
-                </a>
+                </a> -->
                 <a class="nav-link" href="/botPage">
                     <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
                     <span class="nav-text">Bots</span>
@@ -42,23 +44,23 @@
                     <span class="nav-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
                     <span class="nav-text">Add Bot</span>
                 </a>
-                <a class="nav-link" href="/profile">
+                <!-- <a class="nav-link" href="/profile">
                     <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
                     <span class="nav-text">Profile</span>
-                </a>
+                </a> -->
                 <a class="nav-link active" href="/users">
                     <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
                     <span class="nav-text">Users</span>
                 </a>
                 <a class="nav-link" href="/EditBot">
-                    <span class="nav-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
+                    <span class="nav-icon"><i class="bi bi-file-earmark-code"></i></span>
                     <span class="nav-text">Edit Bots</span>
                 </a>
                 <a class="nav-link" href="/DeleteBot">
                     <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
                     <span class="nav-text">Delete Bots</span>
                 </a>
-                <a class="nav-link" href="components.html">
+                <!-- <a class="nav-link" href="components.html">
                     <span class="nav-icon"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span>
                     <span class="nav-text">Components</span>
                 </a>
@@ -90,11 +92,11 @@
             <div class="sidebar-footer">
                 <span class="status-dot"></span>
                 <span class="sidebar-footer-text">System running smoothly</span>
-            </div>
+            </div> -->
         </aside>
 
         <div class="admin-main">
-            <nav class="navbar admin-navbar navbar-expand bg-white">
+            <!-- <nav class="navbar admin-navbar navbar-expand bg-white">
                 <div class="container-fluid px-3 px-lg-4">
                     <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar"
                         aria-expanded="true" aria-label="Toggle sidebar">
@@ -154,7 +156,7 @@
                         </div>
                     </div>
                 </div>
-            </nav>
+            </nav> -->
 
             <main class="dashboard-content">
                 <div class="container-fluid px-3 px-lg-4 py-4">
@@ -163,8 +165,8 @@
                             <span class="page-icon"><i class="bi bi-table" aria-hidden="true"></i></span>
                             <div>
                                 <p class="eyebrow mb-1">Data</p>
-                                <h1 class="h3 mb-1">Tables</h1>
-                                <p class="text-muted mb-0">Use responsive, searchable tables for operational records.
+                                <h1 class="h3 mb-1">Users</h1>
+
                                 </p>
                             </div>
                         </div>
@@ -175,8 +177,8 @@
                         <div class="panel-header">
                             <div>
                                 <h2 class="h5 mb-1 section-title"><i class="bi bi-table"
-                                        aria-hidden="true"></i><span>Advanced Table</span></h2>
-                                <p class="text-muted mb-0">Searchable responsive table for orders and customer data.</p>
+                                        aria-hidden="true"></i><span>User Table</span></h2>
+
                             </div><input class="form-control form-control-sm table-search" type="search"
                                 placeholder="Search orders" data-table-search="ordersTable" aria-label="Search orders">
                         </div>
@@ -184,72 +186,25 @@
                             <table class="table align-middle mb-0" id="ordersTable" data-searchable-table>
                                 <thead>
                                     <tr>
-                                        <th>Order</th>
-                                        <th>Product</th>
-                                        <th>Customer</th>
-                                        <th>Status</th>
-                                        <th>Amount</th>
-                                        <th>Date</th>
-                                        <th class="text-end">Action</th>
+                                        <th>ID</th>
+                                        <th>FirstName</th>
+                                        <th>LastName</th>
+                                        <th>BotName</th>
+                                        <th>Branch</th>
+                                        <th>Created_At</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {% for value in values %}
                                     <tr>
-                                        <td class="fw-semibold">#HMD-2048</td>
-                                        <td>
-                                            <div class="table-media"><img class="product-thumb"
-                                                    src="../assets/images/ecommerce/product-1.jpg"
-                                                    alt="Wireless Headset"><span>Wireless Headset</span></div>
-                                        </td>
-                                        <td>Sarah Ahmed</td>
-                                        <td><span class="badge text-bg-success">Paid</span></td>
-                                        <td>$1,240</td>
-                                        <td>May 6, 2026</td>
-                                        <td class="text-end"><button class="btn btn-light btn-sm"
-                                                type="button">View</button></td>
+                                        <td class="fw-semibold">#{{value.id}}</td>
+                                        <td>{{value.first_name}}</td>
+                                        <td>{{value.last_name}}</td>
+                                        <td>{{value.bot_name}}</td>
+                                        <td>{{value.branch}}</td>
+                                        <td>{{value.created_at}}</td>
                                     </tr>
-                                    <tr>
-                                        <td class="fw-semibold">#HMD-2047</td>
-                                        <td>
-                                            <div class="table-media"><img class="product-thumb"
-                                                    src="../assets/images/ecommerce/product-2.jpg"
-                                                    alt="Smart Watch"><span>Smart Watch</span></div>
-                                        </td>
-                                        <td>Rafi Khan</td>
-                                        <td><span class="badge text-bg-warning">Pending</span></td>
-                                        <td>$860</td>
-                                        <td>May 5, 2026</td>
-                                        <td class="text-end"><button class="btn btn-light btn-sm"
-                                                type="button">View</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">#HMD-2046</td>
-                                        <td>
-                                            <div class="table-media"><img class="product-thumb"
-                                                    src="../assets/images/ecommerce/product-3.jpg"
-                                                    alt="Desk Lamp"><span>Desk Lamp</span></div>
-                                        </td>
-                                        <td>Nadia Islam</td>
-                                        <td><span class="badge text-bg-info">Shipped</span></td>
-                                        <td>$430</td>
-                                        <td>May 3, 2026</td>
-                                        <td class="text-end"><button class="btn btn-light btn-sm"
-                                                type="button">View</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="fw-semibold">#HMD-2045</td>
-                                        <td>
-                                            <div class="table-media"><img class="product-thumb"
-                                                    src="../assets/images/ecommerce/product-4.jpg"
-                                                    alt="Travel Backpack"><span>Travel Backpack</span></div>
-                                        </td>
-                                        <td>Mina Torres</td>
-                                        <td><span class="badge text-bg-danger">Failed</span></td>
-                                        <td>$220</td>
-                                        <td>May 2, 2026</td>
-                                        <td class="text-end"><button class="btn btn-light btn-sm"
-                                                type="button">View</button></td>
-                                    </tr>
+                                    {% endfor %}
                                 </tbody>
                             </table>
                         </div>

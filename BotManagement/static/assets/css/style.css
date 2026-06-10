@@ -52,8 +52,7 @@ a {
   display: flex;
   flex-direction: column;
   overflow-x: hidden;
-  overflow-y: auto;
-  /* Reserve scrollbar gutter to keep inner content width stable so header/footer dividers align with scrollbar */
+
   scrollbar-gutter: stable;
   background: var(--admin-sidebar);
   color: #ffffff;
@@ -1620,4 +1619,18 @@ html[data-theme="dark"] {
   color: green;
   font-size: large;
   font-family: 'Times New Roman', Times, serif;
+}
+.brand-logo{
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.brand-logo img{
+    width: 55px !important;
+    height: 55px !important;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
 }

@@ -1,12 +1,12 @@
 from django.shortcuts import render
 from bot.bank_bot import Database
 from bot.bank_bot import Bot
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 import json
 import os
 import shutil
 from django.conf import settings
-
+from openpyxl import Workbook
 
 
 def home(request):
@@ -19,8 +19,13 @@ def botPage(request):
 
     bots = bot.get_bots()
 
+    active_bots = bot.get_active_bots()
+
+    inactive_bots = bot.get_inactive_bots()
     context = {
-        "bots": bots
+        "bots": bots,
+        "activeBots": active_bots,
+        "inactiveBots": inactive_bots
     }
     print("CONTEXT",context)
     return render(
@@ -131,7 +136,14 @@ def profilePage(request):
 def EditBotPage(request):
     return render(request, "EditBot.html")
 def UserPage(request):
-    return render(request, "users.html")
+    bots = Database()
+
+    BotsTable = bots.get_full_botDetails()
+    
+    context = {
+       "values" : BotsTable
+    }
+    return render(request, "users.html", context)
 def EditBot(request):
 
     bot = Database()
@@ -349,7 +361,9 @@ def botRunDetails(request, botId):
 def logDetails(request, runId):
     dataBase = Database()
 
-    response  =dataBase.view_logs(runId)
+    response = dataBase.view_logs(runId)
+
+    response["runId"] = runId
 
     return render(request, "logDetails.html", response)
 def DeleteBot(request):
@@ -400,3 +414,46 @@ def DeleteBot(request):
             "description" : str(e)
         })
 
+
+def ExportLogs(request, run_id):
+
+    db = Database()
+
+    logs = db.view_logs(run_id)
+    
+    print(logs)
+    wb = Workbook()
+    ws = wb.active
+
+    ws.title = "Logs"
+
+    # Header row
+    ws.append([
+        "ID",
+        "Timestamp",
+        "Level",
+        "Message"
+    ])
+
+    # Data rows
+    for log in logs["bots"]:
+        ws.append([
+            log["id"],
+            log["run_id"],
+            log["message"],
+            log["created_at"],
+            log["status"]
+        ])
+
+    response = HttpResponse(
+        content_type=
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
+    response[
+        "Content-Disposition"
+    ] = f'attachment; filename="logs_run_{run_id}.xlsx"'
+
+    wb.save(response)
+
+    return response

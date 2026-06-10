@@ -27,27 +27,35 @@ function getCookie(name) {
 document.querySelectorAll(".run-btn").forEach(button => {
 
     button.addEventListener("click", async function () {
-     
 
         const botId = this.dataset.botId;
-        
+
         const payload = {
             botId
-        }
+        };
 
-        console.log("Payload",payload);
         const response = await fetch("/api/runBot", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": getCookie("csrftoken")
             },
-
             body: JSON.stringify(payload)
-        })
-        console.log("Request send run success")
+        });
+
         const result = await response.json();
+
         console.log(result);
+
+        // Update UI immediately
+        if (result.status === "Success") {
+
+            document.getElementById(`status-${botId}`).innerHTML =
+                `<span class="badge text-bg-success">
+                    ACTIVE
+                </span>`;
+
+        }
 
     });
 
@@ -103,3 +111,7 @@ document.querySelectorAll(".view-btn").forEach(button => {
     });
 
 });
+function ExportLogs(runId){
+    console.log(runId);
+    window.location.href = `/api/exportLogs/${runId}`;
+}

@@ -126,7 +126,42 @@ class DatabaseModule:
         finally:
             cursor.close()
             conn.close()
-            
+    def get_active_bots(self):
+        conn = self.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        sql = """
+            SELECT COUNT(*) FROM BOTS WHERE
+            status = "ACTIVE"
+        """
+        try:
+      
+            cursor.execute(sql)
+
+            return cursor.fetchone()
+        except Exception as e:
+            print(str(e))
+            return str(e)
+        finally:
+            cursor.close()
+            conn.close()
+    def get_inactive_bots(self):
+        conn = self.get_connection()
+        cursor = conn.cursor(dictionary=True)
+        sql = """
+            SELECT COUNT(*) FROM BOTS WHERE
+            status = "INACTIVE"
+        """
+        try:
+      
+            cursor.execute(sql)
+
+            return cursor.fetchone()
+        except Exception as e:
+            print(str(e))
+            return str(e)
+        finally:
+            cursor.close()
+            conn.close()
     def updateColumns(self, botId, pid, status):
         conn = self.get_connection()
         cursor = conn.cursor()
@@ -205,6 +240,7 @@ class DatabaseModule:
 
             return "Deleted Logs"
         except Exception as e:
+            print(str(e))
             return str(e)
         finally:
             cursor.close()
@@ -223,7 +259,7 @@ class DatabaseModule:
             rows = cursor.fetchall()
 
             logs = []
-
+            print(rows)
             for row in rows:
                 logs.append({
                     "id": row[0],
@@ -238,6 +274,7 @@ class DatabaseModule:
             }
 
         except Exception as e:
+            print(str(e))
             return {
                 "bots": [],
                 "error": str(e)
@@ -401,5 +438,42 @@ class DatabaseModule:
 
             cursor.close()
             conn.close()
+    def get_full_botDetails(self):
+        conn = self.get_connection()
+        cursor = conn.cursor(dictionary=True)
+
+        sql = """
+        SELECT id, first_name, last_name, bot_name, branch, created_at FROM BOTS
+        """
+
+        try:
+
+            cursor.execute(
+                sql
+            )
+
+            row = cursor.fetchall()
+
+            if row is None:
+
+                return {
+                    "status": "Error",
+                    "description": "details not found"
+                }
+
+            return row
+
+        except Exception as e:
+
+            return {
+                "status": "Error",
+                "description": str(e)
+            }
+
+        finally:
+
+            cursor.close()
+            conn.close()
+
 
                 
