@@ -81,9 +81,10 @@ class DatabaseModule:
             cursor.close()
             conn.close()      
     def get_bot_toRun(self, botId):
+
         conn = self.get_connection()
         cursor = conn.cursor()
-        
+
         print("Reached Database Models")
 
         sql = """
@@ -91,21 +92,27 @@ class DatabaseModule:
         FROM BOTS
         WHERE id = %s
         """
-        try:
 
-            cursor.execute(sql, (botId,))
+        cursor.execute(sql, (botId,))
 
-            row = cursor.fetchone()
+        row = cursor.fetchone()
 
-            return {
-                "script_path": row[0],
-                "pid": row[1]
-            }
-        except Exception as e:
-            return str(e)
-        finally:
-            cursor.close()
-            conn.close()
+        cursor.close()
+        conn.close()
+
+        if row is None:
+
+            raise Exception(
+                f"Bot {botId} not found in database"
+            )
+
+        return {
+
+            "script_path": row[0],
+
+            "pid": row[1]
+
+        }
             
     def get_bots(self):
         conn = self.get_connection()
@@ -249,7 +256,7 @@ class DatabaseModule:
         conn = self.get_connection()
         cursor = conn.cursor()
         sql = """
-        SELECT * FROM BOT_RUNS
+        SELECT * FROM BOT_RUNS 
         WHERE bot_id = %s
         """
 

@@ -287,7 +287,8 @@ class Bot:
         botId = botPack["botId"]
 
         bot = self.database.get_bot_toRun(botId)
-
+        print(bot)
+        print(type(bot))
         env = os.environ.copy()
         env["PYTHONPATH"] = project_root
 
