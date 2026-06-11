@@ -185,10 +185,19 @@
                                     data-file="{{ file.path }}">
 
                                     <span style="font-family: monospace;">
+
                                         {% for i in "x"|rjust:file.depth %}
-                                        │&nbsp;&nbsp;&nbsp;
+                                        &nbsp;&nbsp;&nbsp;
                                         {% endfor %}
-                                        ├── 📄 {{ file.name }}
+
+                                        {% if file.type == "folder" %}
+                                        <i class="bi bi-folder-fill text-warning"></i>
+                                        {% else %}
+                                        <i class="bi bi-file-earmark-code"></i>
+                                        {% endif %}
+
+                                        {{ file.name }}
+
                                     </span>
 
                                 </button>

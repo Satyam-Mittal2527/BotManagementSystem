@@ -135,6 +135,24 @@ class Database:
 
         for root, dirs, filenames in os.walk(bot_folder):
 
+    # Add folders
+            for dirname in dirs:
+
+                dir_path = os.path.join(root, dirname)
+
+                relative_path = os.path.relpath(
+                    dir_path,
+                    bot_folder
+                )
+
+                files.append({
+                    "path": relative_path,
+                    "name": dirname,
+                    "depth": relative_path.count("/"),
+                    "type": "folder"
+                })
+
+            # Add files
             for filename in filenames:
 
                 full_path = os.path.join(root, filename)
@@ -144,7 +162,12 @@ class Database:
                     bot_folder
                 )
 
-                files.append(relative_path)
+                files.append({
+                    "path": relative_path,
+                    "name": filename,
+                    "depth": relative_path.count("/"),
+                    "type": "file"
+                })
 
         # ------------------------
         # Read main.py
@@ -188,26 +211,8 @@ class Database:
                     visited
                 )
 
-        # ------------------------
-        # Prepare files for UI
-        # ------------------------
-
-        display_files = []
-
-        for file in files:
-
-            depth = file.count("/")
-
-            display_files.append(
-                {
-                    "path": file,
-                    "name": os.path.basename(file),
-                    "depth": depth
-                }
-            )
-
         return {
-            "files": display_files,
+            "files": files,
             "code": code,
             "selected_file": "main.py"
         }
