@@ -258,3 +258,30 @@ class WorkflowDatabaseModule:
             "edges": edges
 
         }
+    def save_workflow(
+        self,
+        workflow_name,
+        description,
+        workflow
+):
+
+        workflow_id = self.insert_workflow(
+            workflow_name,
+            description
+        )
+
+        for node in workflow["nodes"]:
+
+            self.insert_node(
+                workflow_id,
+                node
+            )
+
+        for edge in workflow["edges"]:
+
+            self.insert_edge(
+                workflow_id,
+                edge
+            )
+
+        return workflow_id
