@@ -119,3 +119,15 @@ def get_history(request, workflow_id):
     return JsonResponse(
         history
     )
+
+def get_all_workflows(request):
+
+    workflows = workflowService.get_all_workflows()
+
+    return JsonResponse(
+
+        workflows,
+
+        safe=False
+
+    )

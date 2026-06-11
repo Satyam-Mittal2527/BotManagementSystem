@@ -107,3 +107,6 @@ class WorkflowService:
             "node_runs": node_runs
 
         }
+    def get_all_workflows(self):
+
+        return self.database.get_all_workflows()

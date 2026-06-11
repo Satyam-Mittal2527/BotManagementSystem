@@ -26,7 +26,13 @@ urlpatterns = [
     path(
         "delete/<int:workflow_id>/",
         views.delete_workflow
+    ),
+    path(
+
+        "list/",
+
+        views.get_all_workflows
+
     )
-    
 
 ]

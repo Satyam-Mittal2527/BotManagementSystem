@@ -502,3 +502,25 @@ class WorkflowDatabaseModule:
         conn.close()
 
         return rows
+    def get_all_workflows(self):
+
+        conn = self.get_connection()
+
+        cursor = conn.cursor(
+            dictionary=True
+        )
+
+        sql = """
+        SELECT *
+        FROM WORKFLOWS
+        ORDER BY id DESC
+        """
+
+        cursor.execute(sql)
+
+        rows = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return rows
