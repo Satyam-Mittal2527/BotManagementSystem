@@ -28,15 +28,28 @@ workflow = {
                 "botId":7
             }
         },
-
         {
             "id":"4",
+            "type":"delay",
+            "data":{
+                "seconds":5
+            }
+        },
+
+        {
+            "id":"5",
             "type":"bot",
             "data":{
                 "botId":9
             }
+        },
+        {
+            "id":"6",
+            "type":"api",
+            "data":{
+                "url":"https://jsonplaceholder.typicode.com/todos/1"
+            }
         }
-
     ],
 
     "edges":[
@@ -56,7 +69,20 @@ workflow = {
             "source":"2",
             "target":"4",
             "label":"False"
-        }
+        },
+        {
+            "source":"3",
+            "target":"4"
+        },
+
+        {
+            "source":"4",
+            "target":"5"
+        },
+        {
+            "source":"5",
+            "target":"6"
+        }      
 
     ]
 
