@@ -67,3 +67,4 @@ class DatabaseModule:
         self.cursor.execute(sql)
 
         return self.cursor.fetchall()
+    

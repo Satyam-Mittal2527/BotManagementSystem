@@ -285,3 +285,158 @@ class WorkflowDatabaseModule:
             )
 
         return workflow_id
+    def insert_workflow_run(self,workflow_id):
+
+        connection = self.get_connection()
+
+        cursor = connection.cursor()
+
+        query = """
+
+        INSERT INTO WORKFLOW_RUNS(
+
+            workflow_id,
+
+            status,
+
+            started_at
+
+        )
+
+        VALUES(
+
+            %s,
+
+            %s,
+
+            NOW()
+
+        )
+
+        """
+
+        cursor.execute(
+
+            query,
+
+            (
+
+                workflow_id,
+
+                "RUNNING"
+
+            )
+
+        )
+
+        connection.commit()
+
+        run_id = cursor.lastrowid
+
+        cursor.close()
+
+        connection.close()
+
+        return run_id
+    def update_workflow_run(self,run_id,status):
+
+        connection = self.get_connection()
+
+        cursor = connection.cursor()
+
+        query = """
+
+        UPDATE WORKFLOW_RUNS
+
+        SET
+
+        status=%s,
+
+        ended_at=NOW()
+
+        WHERE id=%s
+
+        """
+
+        cursor.execute(
+
+            query,
+
+            (
+
+                status,
+
+                run_id
+
+            )
+
+        )
+
+        connection.commit()
+
+        cursor.close()
+
+        connection.close()
+    def insert_node_run(self,workflow_run_id,node_id,node_type,status,message):
+
+        connection = self.get_connection()
+
+        cursor = connection.cursor()
+
+        query = """
+
+        INSERT INTO WORKFLOW_NODE_RUNS(
+
+            workflow_run_id,
+
+            node_id,
+
+            node_type,
+
+            status,
+
+            message
+
+        )
+
+        VALUES(
+
+            %s,
+
+            %s,
+
+            %s,
+
+            %s,
+
+            %s
+
+        )
+
+        """
+
+        cursor.execute(
+
+            query,
+
+            (
+
+                workflow_run_id,
+
+                node_id,
+
+                node_type,
+
+                status,
+
+                message
+
+            )
+
+        )
+
+        connection.commit()
+
+        cursor.close()
+
+        connection.close()

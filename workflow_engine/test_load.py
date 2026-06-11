@@ -3,10 +3,14 @@ from workflow_engine.engine import WorkflowEngine
 
 database = WorkflowDatabaseModule()
 
-workflow = database.get_workflow(5)    # use the workflow ID printed by test_db.py
+workflow = database.get_workflow(6)
+
 
 print(workflow)
 
 engine = WorkflowEngine()
 
-engine.execute(workflow)
+engine.execute(
+    workflow,
+    6
+)  

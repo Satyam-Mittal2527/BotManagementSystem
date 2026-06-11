@@ -1,11 +1,18 @@
 from workflow_engine.registry import NODE_MAP
+from modules.workflow_database_module import WorkflowDatabaseModule
 
 
 class WorkflowEngine:
 
-    def execute(self, workflow):
+    def execute(self, workflow, workflow_id):
 
         context = {}
+
+        database = WorkflowDatabaseModule()
+
+        workflow_run_id = database.insert_workflow_run(
+            workflow_id
+        )
 
         current_node = "1"
 
@@ -13,9 +20,24 @@ class WorkflowEngine:
 
             # Find node
             node = next(
-                n for n in workflow["nodes"]
-                if n["id"] == current_node
+                (
+                    n
+                    for n in workflow["nodes"]
+                    if n["id"] == current_node
+                ),
+                None
             )
+
+            if node is None:
+
+                database.update_workflow_run(
+                    workflow_run_id,
+                    "FAILED"
+                )
+
+                raise Exception(
+                    f"Node {current_node} not found"
+                )
 
             # Execute node
             node_class = NODE_MAP[node["type"]]
@@ -24,11 +46,53 @@ class WorkflowEngine:
                 node["data"]
             )
 
-            result = node_obj.execute(
-                context
-            )
+            try:
 
-            print(result)
+                result = node_obj.execute(
+                    context
+                )
+
+                database.insert_node_run(
+
+                    workflow_run_id,
+
+                    node["id"],
+
+                    node["type"],
+
+                    "SUCCESS",
+
+                    "Executed Successfully"
+
+                )
+
+                print(result)
+
+            except Exception as e:
+
+                database.insert_node_run(
+
+                    workflow_run_id,
+
+                    node["id"],
+
+                    node["type"],
+
+                    "FAILED",
+
+                    str(e)
+
+                )
+
+                database.update_workflow_run(
+
+                    workflow_run_id,
+
+                    "FAILED"
+
+                )
+
+                raise e
 
             # Find all outgoing edges
             all_edges = [
@@ -53,7 +117,7 @@ class WorkflowEngine:
 
                             for edge in all_edges
 
-                            if edge["label"] == "True"
+                            if edge.get("label") == "True"
 
                         ),
 
@@ -70,7 +134,7 @@ class WorkflowEngine:
 
                             for edge in all_edges
 
-                            if edge["label"] == "False"
+                            if edge.get("label") == "False"
 
                         ),
 
@@ -91,3 +155,11 @@ class WorkflowEngine:
             else:
 
                 current_node = None
+
+        database.update_workflow_run(
+
+            workflow_run_id,
+
+            "COMPLETED"
+
+        )
