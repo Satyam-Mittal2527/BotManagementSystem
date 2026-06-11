@@ -30,15 +30,58 @@ class WorkflowEngine:
 
             print(result)
 
-            # Find next edge
-            next_edge = next(
-                (
-                    edge
-                    for edge in workflow["edges"]
-                    if edge["source"] == current_node
-                ),
-                None
-            )
+            # Find all outgoing edges
+            all_edges = [
+
+                edge
+
+                for edge in workflow["edges"]
+
+                if edge["source"] == current_node
+
+            ]
+
+            # Condition node
+            if node["type"] == "condition":
+
+                if result:
+
+                    next_edge = next(
+
+                        (
+                            edge
+
+                            for edge in all_edges
+
+                            if edge["label"] == "True"
+
+                        ),
+
+                        None
+
+                    )
+
+                else:
+
+                    next_edge = next(
+
+                        (
+                            edge
+
+                            for edge in all_edges
+
+                            if edge["label"] == "False"
+
+                        ),
+
+                        None
+
+                    )
+
+            # Other nodes
+            else:
+
+                next_edge = all_edges[0] if all_edges else None
 
             # Move to next node
             if next_edge:
