@@ -1,7 +1,7 @@
 from django.db import models
 import mysql.connector
 from datetime import datetime
-
+import json
 import mysql.connector
 class WorkflowDatabaseModule:
     print("DATABASE MODULE LOADED")
@@ -47,11 +47,214 @@ class WorkflowDatabaseModule:
 
         return workflow_id
 
-    def insert_node(self):
-        pass
+    def insert_node(self,workflow_id,node):
 
-    def insert_edge(self):
-        pass
+        connection = self.get_connection()
 
-    def get_workflow(self):
-        pass
+        cursor = connection.cursor()
+
+        query = """
+        INSERT INTO WORKFLOW_NODES(
+
+            workflow_id,
+
+            node_id,
+
+            node_type,
+
+            data_json
+
+        )
+
+        VALUES(%s,%s,%s,%s)
+
+        """
+
+        cursor.execute(
+
+            query,
+
+            (
+
+                workflow_id,
+
+                node["id"],
+
+                node["type"],
+
+                json.dumps(
+                    node["data"]
+                )
+
+            )
+
+        )
+
+        connection.commit()
+
+        cursor.close()
+
+        connection.close()
+
+    def insert_edge(self,workflow_id,edge):
+        connection = self.get_connection()
+
+        cursor = connection.cursor()
+
+        query = """
+
+        INSERT INTO WORKFLOW_EDGES(
+
+            workflow_id,
+
+            source_node,
+
+            target_node,
+
+            edge_label
+
+        )
+
+        VALUES(%s,%s,%s,%s)
+
+            """
+
+        cursor.execute(
+
+            query,
+
+            (
+
+                workflow_id,
+
+                edge["source"],
+
+                edge["target"],
+
+                    edge.get("label")
+
+            )
+
+        )
+
+        connection.commit()
+
+        cursor.close()
+
+        connection.close()
+
+    def get_workflow(self,workflow_id):
+
+        connection = self.get_connection()
+
+        cursor = connection.cursor(
+            dictionary=True
+        )
+
+        # -----------------------
+        # Load Nodes
+        # -----------------------
+
+        cursor.execute(
+
+            """
+
+            SELECT
+
+            node_id,
+
+            node_type,
+
+            data_json
+
+            FROM WORKFLOW_NODES
+
+            WHERE workflow_id=%s
+
+            """,
+
+            (workflow_id,)
+
+        )
+
+        nodes_result = cursor.fetchall()
+
+        nodes = []
+
+        for node in nodes_result:
+
+            nodes.append(
+
+                {
+
+                    "id": node["node_id"],
+
+                    "type": node["node_type"],
+
+                    "data": json.loads(
+                        node["data_json"]
+                    )
+
+                }
+
+            )
+
+        # -----------------------
+        # Load Edges
+        # -----------------------
+
+        cursor.execute(
+
+            """
+
+            SELECT
+
+            source_node,
+
+            target_node,
+
+            edge_label
+
+            FROM WORKFLOW_EDGES
+
+            WHERE workflow_id=%s
+
+            """,
+
+            (workflow_id,)
+
+        )
+
+        edges_result = cursor.fetchall()
+
+        edges = []
+
+        for edge in edges_result:
+
+            edge_dict = {
+
+                "source": edge["source_node"],
+
+                "target": edge["target_node"]
+
+            }
+
+            if edge["edge_label"]:
+
+                edge_dict["label"] = edge["edge_label"]
+
+            edges.append(
+                edge_dict
+            )
+
+        cursor.close()
+
+        connection.close()
+
+        return {
+
+            "nodes": nodes,
+
+            "edges": edges
+
+        }
