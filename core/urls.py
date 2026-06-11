@@ -17,8 +17,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('BotManagement.urls')),
+
+    path(
+        'admin/',
+        admin.site.urls
+    ),
+
+    path(
+        '',
+        include('BotManagement.urls')
+    ),
+
+    path(
+        'workflow/',
+        include('WorkflowManagement.urls')
+    ),
+
 ]

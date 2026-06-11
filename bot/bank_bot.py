@@ -406,3 +406,15 @@ class Bot:
                 "status": "Error",
                 "description": str(e)
             }
+    def get_workflow_runs(
+        self,
+        workflow_id
+    ):
+        pass
+
+
+    def get_node_runs(
+        self,
+        workflow_id
+    ):
+        pass

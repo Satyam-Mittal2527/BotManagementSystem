@@ -258,13 +258,7 @@ class WorkflowDatabaseModule:
             "edges": edges
 
         }
-    def save_workflow(
-        self,
-        workflow_name,
-        description,
-        workflow
-):
-
+    def save_workflow(self,workflow_name,description,workflow):
         workflow_id = self.insert_workflow(
             workflow_name,
             description
@@ -286,7 +280,6 @@ class WorkflowDatabaseModule:
 
         return workflow_id
     def insert_workflow_run(self,workflow_id):
-
         connection = self.get_connection()
 
         cursor = connection.cursor()
@@ -440,3 +433,72 @@ class WorkflowDatabaseModule:
         cursor.close()
 
         connection.close()
+    def get_workflow_runs(self,workflow_id):
+        conn = self.get_connection()
+
+        cursor = conn.cursor(
+            dictionary=True
+        )
+
+        sql = """
+        SELECT *
+        FROM WORKFLOW_RUNS
+        WHERE workflow_id=%s
+        ORDER BY id DESC
+        """
+
+        cursor.execute(
+            sql,
+            (
+                workflow_id,
+            )
+        )
+
+        rows = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return rows
+
+
+    def get_node_runs(
+    self,
+    workflow_id
+):
+
+        conn = self.get_connection()
+
+        cursor = conn.cursor(
+            dictionary=True
+        )
+
+        sql = """
+
+        SELECT N.*
+
+        FROM WORKFLOW_NODE_RUNS N
+
+        JOIN WORKFLOW_RUNS W
+
+        ON N.workflow_run_id=W.id
+
+        WHERE W.workflow_id=%s
+
+        ORDER BY N.id DESC
+
+        """
+
+        cursor.execute(
+            sql,
+            (
+                workflow_id,
+            )
+        )
+
+        rows = cursor.fetchall()
+
+        cursor.close()
+        conn.close()
+
+        return rows

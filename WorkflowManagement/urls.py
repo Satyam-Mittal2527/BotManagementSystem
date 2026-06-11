@@ -1,0 +1,32 @@
+from django.urls import path, include
+from . import views
+
+urlpatterns = [
+
+    path(
+        "run/<int:workflow_id>/",
+        views.run_workflow
+    ),
+
+    path(
+        "get/<int:workflow_id>/",
+        views.get_workflow
+    ),
+
+    path(
+        "save/",
+        views.save_workflow
+    ),
+
+    path(
+        "history/<int:workflow_id>/",
+        views.get_history
+    ),
+
+    path(
+        "delete/<int:workflow_id>/",
+        views.delete_workflow
+    )
+    
+
+]
