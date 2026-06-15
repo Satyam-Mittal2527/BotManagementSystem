@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="adminHMD professional admin dashboard template">
-  <title>SANIMA| Bot Details Page</title>
+  <title>SANIMA| Bot Page</title>
   <link rel="icon" type="image/png" href="{% static 'assets/images/favicon.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/bootstrap-icons/bootstrap-icons.css' %}">
@@ -30,13 +30,12 @@
           </span>
         </a>
       </div>
-
       <nav class="sidebar-nav">
         <!-- <a class="nav-link" href="/">
           <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
           <span class="nav-text">Dashboard</span>
         </a> -->
-        <a class="nav-link active" href="/botPage" aria-current="page">
+        <a class="nav-link" href="/botPage" aria-current="page">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Bots</span>
         </a>
@@ -60,11 +59,11 @@
           <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
           <span class="nav-text">Delete Bots</span>
         </a>
-         <a class="nav-link" href="/workflowBuilder">
+        <a class="nav-link" href="/workflowBuilder">
           <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
           <span class="nav-text">Workflow Builderr</span>
         </a>
-        <a class="nav-link" href="/workflowPage">
+        <a class="nav-link active" href="/workflowPage">
           <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
           <span class="nav-text">WorkFlow Page</span>
         </a>
@@ -175,106 +174,99 @@
                 <h1 class="h3 mb-1">Bots</h1>
               </div>
             </div>
-            <div class="heading-actions"><a class="btn btn-outline-secondary btn-sm" href="/botPage"><i
-                  class="bi bi-arrow-left" aria-hidden="true"></i> Back to Bots</a></div>
+            <div class="heading-actions"><a class="btn btn-primary btn-sm" href="/workflowBuilder"><i class="bi bi-person-plus"
+                  aria-hidden="true"></i> Add Workflow</a></div>
           </div>
 
           <section class="row g-3 mt-1" aria-label="User summary">
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-primary">
                 <div class="metric-top">
-                  <span class="metric-label">Total Logs</span>
+                  <span class="metric-label">Total Bots</span>
                   <span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">2</div>
+                <div class="metric-value">{{bots | length}}</div>
+
               </article>
             </div>
 
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-success">
                 <div class="metric-top">
-                  <span class="metric-label">Total Error</span>
+                  <span class="metric-label">Active BOTS</span>
                   <span class="metric-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
                 </div>
-                 <div class="metric-value">184</div>
+                <div class="metric-value">{{activeBots}}</div>
               </article>
             </div>
 
             <div class="col-12 col-sm-6 col-xl-3">
               <article class="metric-card metric-warning">
                 <div class="metric-top">
-                  <span class="metric-label">Total Runing</span>
+                  <span class="metric-label">INACTIVE</span>
                   <span class="metric-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
                 </div>
-                <div class="metric-value">184</div>
+                <div class="metric-value">{{inactiveBots}}</div>
               </article>
             </div>
 
-            <div class="col-12 col-sm-6 col-xl-3">
-              <article class="metric-card metric-danger">
-                <div class="metric-top">
-                  <span class="metric-label">Total Stopped</span>
-                  <span class="metric-icon"><i class="bi bi-slash-circle" aria-hidden="true"></i></span>
-                </div>
-                <div class="metric-value">38</div>
-              </article>
-            </div>
           </section>
 
           <section class="panel mt-3">
             <div class="panel-header">
               <div>
-                <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>Logs List</span>
+                <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>Bots List</span>
                 </h2>
                 <p class="text-muted mb-0">Search, review, and manage team member accounts.</p>
               </div>
               <div class="d-flex flex-wrap gap-2">
-                <input class="form-control form-control-sm table-search" type="search" placeholder="Search users"
+                <input class="form-control form-control-sm table-search" type="search" placeholder="Search Workflow"
                   data-table-search="usersTable" aria-label="Search users">
-                <a class="btn btn-primary btn-sm" href="/addBot"><i class="bi bi-person-plus" aria-hidden="true"></i>
-                  Add Bot</a>
-                <button class="btn btn-success" onclick="ExportLogs('{{ runId }}')">
-                  <i class="bi bi-file-earmark-excel"></i>
-                  Export Logs
-                </button>
-              </div>
+                 <div class="heading-actions"><a class="btn btn-primary btn-sm" href="/workflowBuilder"><i class="bi bi-person-plus"
+                  aria-hidden="true"></i> Add Workflow</a></div>
+          </div>
             </div>
             <div class="table-responsive">
               <table class="table align-middle mb-0" id="usersTable" data-searchable-table>
                 <thead>
                   <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">RUN ID</th>
-                    <th scope="col">MESSAGE</th>
-                    <th scope="col">CREATED_AT</th>
-                    <th scope="col">STATUS</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Created At</th>
+                    <th scope="col">Process</th>
+                    <th scope="col">Process</th>
+                    <th scope="col">Process</th>
+
                   </tr>
                 </thead>
                 <tbody>
-                  {% for bot in bots %}
+                  {% for workflow in workflows %}
                   <tr>
-                    <td>#{{bot.id}}</td>
+                    <td>#{{workflow.id}}</td>
                     <td>
-                      <p class="fw-semibold mb-0">{{bot.run_id}}</p>
+                      <p class="fw-semibold mb-0">{{workflow.workflow_name}}</p>
                     </td>
-                    <td>{{bot.message}}</td>
-                    <td>{{bot.created_at}}</td>
+                    <td>{{workflow.description}}</td>
+                    <td>{{workflow.created_at}}</td>
+
                     <td>
-
-                      {% if bot.status == "Running" %}
-                      <span class="badge text-bg-success">{{ bot.status }}</span>
-
-                      {% elif bot.status == "Error" %}
-                      <span class="badge text-bg-danger">{{ bot.status }}</span>
-
-                      {% elif bot.status == "Stopped" %}
-                      <span class="badge text-bg-secondary">{{ bot.status }}</span>
-
-                      {% else %}
-                      <span class="badge text-bg-warning">{{ bot.status }}</span>
-                      {% endif %}
+                      <button class="run-btn" data-workflow-id="{{workflow.id}}">
+                        RUN
+                      </button>
                     </td>
-                  </tr>
+                    <td>
+                      <button class="history-btn" data-workflow-id="{{ workflow.id }}"
+                        onclick="viewHistory('{{ workflow.id }}')">
+                        History
+                      </button>
+                    </td>
+                    <td>
+                      <button class="delete-btn" data-workflow-id="{{workflow.id}}">
+                        Delete
+                      </button>
+                    </td>
+                    </td>
                   </tr>
                   {% endfor %}
                 </tbody>
@@ -291,9 +283,10 @@
       </footer>
     </div>
   </div>
-  <script src="{% static 'assets/js/BotPage.js' %}"></script>
+  <script src="{% static 'assets/js/workflow.js' %}"></script>
   <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'assets/js/main.js' %}"></script>
+
 </body>
 
 </html>

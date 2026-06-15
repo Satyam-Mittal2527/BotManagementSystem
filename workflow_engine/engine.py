@@ -14,11 +14,15 @@ class WorkflowEngine:
             workflow_id
         )
 
-        current_node = "1"
+        current_node = workflow["nodes"][0]["id"]
 
         while current_node:
+            print("Current node:", current_node)
+            print("Workflow nodes:")
 
-            # Find node
+            for n in workflow["nodes"]:
+                print(n)
+
             node = next(
                 (
                     n
@@ -40,6 +44,8 @@ class WorkflowEngine:
                 )
 
             # Execute node
+            print(node["type"])
+            print(NODE_MAP)
             node_class = NODE_MAP[node["type"]]
 
             node_obj = node_class(
@@ -49,7 +55,13 @@ class WorkflowEngine:
             try:
 
                 result = node_obj.execute(
-                    context
+
+                    context,
+
+                    database,
+
+                    workflow_run_id
+
                 )
 
                 database.insert_node_run(

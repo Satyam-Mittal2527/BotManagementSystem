@@ -4,11 +4,22 @@ from workflow_engine.nodes.bot_node import BotNode
 from workflow_engine.nodes.delay_node import DelayNode
 from workflow_engine.nodes.api_node import APINode
 from workflow_engine.nodes.loop_node import LoopNode
+from workflow_engine.nodes.script_node import ScriptNode
+
 NODE_MAP = {
+
     "variable": VariableNode,
+
     "condition": ConditionNode,
+
     "bot": BotNode,
+
     "delay": DelayNode,
+
     "api": APINode,
-    "loop": LoopNode
+
+    "loop": LoopNode,
+
+    "script": ScriptNode
+
 }

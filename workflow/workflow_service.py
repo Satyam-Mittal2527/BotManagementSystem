@@ -43,7 +43,7 @@ class WorkflowService:
         workflow_id
 
     ):
-
+        print("WorkflowID_fromservice:", workflow_id)
         workflow = self.database.get_workflow(
 
             workflow_id
@@ -84,8 +84,18 @@ class WorkflowService:
 
     ):
 
-        pass
+        try:
+            response = self.database.delete_workflow(workflow_id)
 
+            return {
+                "status": "deleted",
+                "description": response
+            }
+        except Exception as e:
+            return {
+                "status": "error",
+                "description": str(e)
+            }
 
     def get_history(
     self,
@@ -110,3 +120,13 @@ class WorkflowService:
     def get_all_workflows(self):
 
         return self.database.get_all_workflows()
+
+    def get_dashboard(self):
+
+        return self.database.get_dashboard()
+    def getWorkflowLogs(self,workflow_run_id):
+
+        return self.database.get_logs(
+
+            workflow_run_id
+        )

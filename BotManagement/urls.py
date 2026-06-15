@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.urls import include, path
 from .views import home, botPage, addBot, NewBot, EditBotPage , UserPage, DeleteBotPage, ExportLogs
 from .views import runBot, stopBot, botRunDetails, profilePage, logDetails, EditBot, ViewBotCode, ViewFile,DeleteBot
+from .views import  workflowPage,workflowBuilder,workflowHistory,workflowDashboard,workflowDetails,workflowLogs, workflowMonitor,workflowBuilder
 
 print("Add bot calling")
 urlpatterns = [
@@ -21,5 +22,12 @@ urlpatterns = [
     path('users', UserPage),
     path('api/DeleteBot', DeleteBot),
     path('DeleteBot', DeleteBotPage),
-    path("api/exportLogs/<int:run_id>",ExportLogs)
+    path("api/exportLogs/<int:run_id>",ExportLogs),
+    path('workflowPage', workflowPage),
+    path('workflowBuilder', workflowBuilder),
+    path('workflowHistory/<int:workflow_id>/', workflowHistory),
+    path("workflowLogs/<int:workflow_run_id>/",workflowLogs),
+  
+    
+   
 ]

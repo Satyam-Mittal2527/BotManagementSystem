@@ -3,6 +3,7 @@ from bot.bank_bot import Database
 from bot.bank_bot import Bot
 from django.http import JsonResponse, HttpResponse
 import json
+import httpx
 import os
 import shutil
 from django.conf import settings
@@ -382,12 +383,12 @@ def DeleteBot(request):
         source = script_path = bot_data["script_path"]
         
 
-        # destination = os.path.join(
-        #     settings.DELETED_BOT_STORAGE_PATH,
-        #     os.path.basename(source)
-        # )
+        destination = os.path.join(
+            settings.DELETED_BOT_STORAGE_PATH,
+            os.path.basename(source)
+        )
 
-        # shutil.move(source, destination)
+        shutil.move(source, destination)
 
         runs_data = bot.view_runs(bot_id)
         for run in runs_data["bots"]:
@@ -457,3 +458,85 @@ def ExportLogs(request, run_id):
     wb.save(response)
 
     return response
+
+async def workflowPage(request):
+
+    async with httpx.AsyncClient() as client:
+        response = await client.get(
+            "http://127.0.0.1:8000/workflow/list/"
+        )
+
+    workflows = response.json()
+    print("workflow:", workflows)
+    return render(
+        request,
+        "workflow_page.html",
+        {
+            "workflows": workflows
+        }
+    )
+
+def workflowBuilder(request):
+
+    return render(
+        request,
+        "workflow_builder.html"
+    )
+
+
+def workflowHistory(request, workflow_id):
+
+    return render(
+        request,
+        "workflow_history.html"
+    )
+
+
+def workflowDashboard(request):
+
+    return render(
+        request,
+        "workflow_dashboard.html"
+    )
+def workflowDetails(
+    request,
+    workflow_id
+):
+
+    return render(
+
+        request,
+
+        "workflow_details.html"
+
+    )
+def workflowLogs(
+    request,
+    workflowRun_id
+):
+
+    return render(
+
+        request,
+
+        "workflow_logs.html"
+
+    )
+def workflowMonitor(request):
+
+    return render(
+
+        request,
+
+        "workflow_monitor.html"
+
+    )
+def workflowBuilder(request):
+
+    return render(
+
+        request,
+
+        "workflow_builder.html"
+
+    )

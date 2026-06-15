@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 import mysql.connector
 class WorkflowDatabaseModule:
-    print("DATABASE MODULE LOADED")
+    print("WORKFFLOW MODULE LOADED")
     def __init__(self):
        pass
     def get_connection(self):
@@ -178,6 +178,7 @@ class WorkflowDatabaseModule:
         )
 
         nodes_result = cursor.fetchall()
+        print("nodes_result =", nodes_result)
 
         nodes = []
 
@@ -258,25 +259,39 @@ class WorkflowDatabaseModule:
             "edges": edges
 
         }
-    def save_workflow(self,workflow_name,description,workflow):
+    def save_workflow(self, workflow_name, description, workflow):
+
         workflow_id = self.insert_workflow(
             workflow_name,
             description
         )
 
-        for node in workflow["nodes"]:
+        nodes = workflow["drawflow"]["Home"]["data"]
 
+        for node_id, node in nodes.items():
+
+            # Insert node
             self.insert_node(
                 workflow_id,
-                node
+                {
+                    "id": node["id"],
+                    "type": node["name"],
+                    "data": node["data"]
+                }
             )
 
-        for edge in workflow["edges"]:
+            # Insert edges
+            connections = node["outputs"]["output_1"]["connections"]
 
-            self.insert_edge(
-                workflow_id,
-                edge
-            )
+            for connection in connections:
+
+                self.insert_edge(
+                    workflow_id,
+                    {
+                        "source": node["id"],
+                        "target": int(connection["node"])
+                    }
+                )
 
         return workflow_id
     def insert_workflow_run(self,workflow_id):
@@ -524,3 +539,190 @@ class WorkflowDatabaseModule:
         conn.close()
 
         return rows
+    def get_dashboard(self):
+
+        conn = self.get_connection()
+
+        cursor = conn.cursor(
+            dictionary=True
+        )
+
+        dashboard = {}
+
+        # Total workflows
+
+        cursor.execute(
+            """
+            SELECT COUNT(*) total
+            FROM WORKFLOWS
+            """
+        )
+
+        dashboard["total_workflows"] = cursor.fetchone()["total"]
+
+
+        # Running workflows
+
+        cursor.execute(
+            """
+            SELECT COUNT(*) total
+            FROM WORKFLOW_RUNS
+            WHERE status='RUNNING'
+            """
+        )
+
+        dashboard["running"] = cursor.fetchone()["total"]
+
+
+        # Completed workflows
+
+        cursor.execute(
+            """
+            SELECT COUNT(*) total
+            FROM WORKFLOW_RUNS
+            WHERE status='COMPLETED'
+            """
+        )
+
+        dashboard["completed"] = cursor.fetchone()["total"]
+
+
+        # Failed workflows
+
+        cursor.execute(
+            """
+            SELECT COUNT(*) total
+            FROM WORKFLOW_RUNS
+            WHERE status='FAILED'
+            """
+        )
+
+        dashboard["failed"] = cursor.fetchone()["total"]
+
+        cursor.close()
+        conn.close()
+
+        return dashboard
+    def delete_workflow(self, workflowId):
+        conn = self.get_connection()
+
+        cursor = conn.cursor(
+            dictionary=True
+        )
+
+        sql = """
+            DELETE FROM WORKFLOWS WHERE 
+            id = %s
+        """
+        try:
+            cursor.execute(sql, (workflowId,))
+            conn.commit()
+
+            return {
+                "Deleted Logs"
+            }
+        except Exception as e:
+            print(str(e))
+            return str(e)
+        finally:
+            cursor.close()
+            conn.close()
+    def insert_log(
+
+        self,
+
+        workflow_run_id,
+
+        node_id,
+
+        log_level,
+
+        message
+
+    ):
+
+        connection = self.get_connection()
+
+        cursor = connection.cursor()
+
+        cursor.execute(
+
+            """
+
+            INSERT INTO WORKFLOW_LOGS(
+
+                workflow_run_id,
+
+                node_id,
+
+                log_level,
+
+                message
+
+            )
+
+            VALUES(%s,%s,%s,%s)
+
+            """,
+
+            (
+
+                workflow_run_id,
+
+                node_id,
+
+                log_level,
+
+                message
+
+            )
+
+        )
+
+        connection.commit()
+
+        cursor.close()
+
+        connection.close()
+
+    def get_logs(
+
+        self,
+
+        workflow_run_id
+
+    ):
+
+        connection = self.get_connection()
+
+        cursor = connection.cursor(
+
+            dictionary=True
+
+        )
+
+        cursor.execute(
+
+            """
+
+            SELECT *
+
+            FROM WORKFLOW_LOGS
+
+            WHERE workflow_run_id=%s
+
+            ORDER BY created_at
+
+            """,
+
+            (workflow_run_id,)
+
+        )
+
+        logs = cursor.fetchall()
+
+        cursor.close()
+
+        connection.close()
+
+        return logs

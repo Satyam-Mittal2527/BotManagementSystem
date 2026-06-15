@@ -83,9 +83,45 @@ class Database:
 
         visited.add(module_path)
 
-        if module_path not in files:
-            files.append(module_path)
+        # Add parent folders
+        parts = module_path.split("/")
 
+        current = ""
+
+        for folder in parts[:-1]:
+
+            current = folder if current == "" else current + "/" + folder
+
+            if not any(
+                    isinstance(f, dict)
+                    and f["path"] == current
+                    for f in files
+            ):
+
+                files.append(
+                    {
+                        "path": current,
+                        "name": folder,
+                        "depth": current.count("/"),
+                        "type": "folder"
+                    }
+                )
+
+        # Add file itself
+        if not any(
+                isinstance(f, dict)
+                and f["path"] == module_path
+                for f in files
+        ):
+
+            files.append(
+                {
+                    "path": module_path,
+                    "name": os.path.basename(module_path),
+                    "depth": module_path.count("/"),
+                    "type": "file"
+                }
+            )
         absolute_path = os.path.join(
             settings.BOT_STORAGE_PATH,
             module_path
@@ -210,7 +246,7 @@ class Database:
                     files,
                     visited
                 )
-
+        print("FILES:",files)
         return {
             "files": files,
             "code": code,
@@ -406,15 +442,4 @@ class Bot:
                 "status": "Error",
                 "description": str(e)
             }
-    def get_workflow_runs(
-        self,
-        workflow_id
-    ):
-        pass
-
-
-    def get_node_runs(
-        self,
-        workflow_id
-    ):
-        pass
+   

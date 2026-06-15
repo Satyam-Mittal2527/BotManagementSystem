@@ -483,4 +483,16 @@ class DatabaseModule:
             conn.close()
 
 
-                
+class Workflow(models.Model):
+
+    workflow_name = models.CharField(
+        max_length=100
+    )
+
+    description = models.TextField()
+
+    workflow = models.JSONField()
+
+    created_at = models.DateTimeField(
+        auto_now_add=True
+    )
