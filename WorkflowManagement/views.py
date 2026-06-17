@@ -66,7 +66,7 @@ def save_workflow(request):
         body = json.loads(
             request.body
         )
-        print(body)
+        # print(body)
         workflow_id = workflowService.save_workflow(
 
             body["workflow_name"],
@@ -90,7 +90,7 @@ def save_workflow(request):
         )
 
     except Exception as e:
-        print(str(e))
+        # print(str(e))
         return JsonResponse(
 
             {
@@ -253,8 +253,8 @@ def getWorkflowLogs(
     workflow_run_id
 
 ):  
-    print("Reached views")
-    print(workflow_run_id)
+    # print("Reached views")
+    # print(workflow_run_id)
     logs = workflowService.getWorkflowLogs(workflow_run_id)
     
 
@@ -307,7 +307,7 @@ def open_file(request):
             request.body
         )
 
-        print(body)
+        # print(body)
 
         workflow_folder = os.path.join(
 
@@ -325,7 +325,7 @@ def open_file(request):
 
         )
 
-        print(file_path)
+        # print(file_path)
 
         with open(
 
@@ -349,7 +349,7 @@ def open_file(request):
 
     except Exception as e:
 
-        print("ERROR:", str(e))
+        # print("ERROR:", str(e))
 
         return JsonResponse(
 
@@ -409,21 +409,3 @@ def edit_file(request):
         }
 
     )
-def DeletedWorkflowPage(request):
-    deleted_path = settings.DELETED_WORKFLOW_PATH
-
-    deleted_bots = []
-    if(deleted_path): 
-        for item in os.listdir(deleted_path):
-            full_path = os.path.join(deleted_path, item)
-
-            if os.path.isdir(full_path):
-                deleted_bots.append(item)
-
-    # print(deleted_bots)
-
-    context = {
-    "deleted_bots": deleted_bots
-    }
-
-    return render(request, "deleted_workflow.html", context)

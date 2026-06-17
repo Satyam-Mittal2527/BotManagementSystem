@@ -262,6 +262,26 @@
             font-weight: bold;
 
         }
+
+        #drawflow .condition .output_1::after {
+            content: "True";
+            position: absolute;
+            left: 20px;
+            top: -8px;
+            color: green;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        #drawflow .condition .output_2::after {
+            content: "False";
+            position: absolute;
+            left: 20px;
+            top: -8px;
+            color: red;
+            font-size: 12px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -297,10 +317,7 @@
                     <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
                     <span class="nav-text">Users</span>
                 </a>
-                <a class="nav-link" href="/EditBot">
-                    <span class="nav-icon"><i class="bi bi-file-earmark-code"></i></span>
-                    <span class="nav-text">Edit Bots</span>
-                </a>
+
                 <a class="nav-link" href="/DeleteBot">
                     <span class="nav-icon"><i class="bi bi-trash" aria-hidden="true"></i></span>
                     <span class="nav-text">Delete Bots</span>
@@ -321,174 +338,184 @@
         </aside>
 
         <div class="admin-main">
-
-
             <main class="dashboard-content">
-
-                </section>
-
-                <section class="panel mt-3">
-
-
-                    <div class="workflow-container">
-
-                        <!-- Left Sidebar -->
-                        <div id="sidebar">
-                            <div class="workflow-name-container">
-
-                                <label for="Workflow_name">
-
-                                    Workflow Name
-
-                                </label>
-
-                                <input id="Workflow_name" type="text" placeholder="Enter Workflow Name" required>
-
+                <div class="container-fluid px-3 px-lg-4 py-4">
+                    <div class="page-heading">
+                        <div class="page-heading-copy">
+                            <span class="page-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+                            <div>
+                                <p class="eyebrow mb-1">Workflow Management</p>
+                                <h1 class="h3 mb-1">Workflows</h1>
                             </div>
-                            <h4>Nodes</h4>
-
-                            <div class="node" draggable="true" ondragstart="drag(event)" data-node="process">
-
-                                <span class="shape-icon">
-
-                                    <i class="bi bi-square shape-icon"></i>
-                                </span>
-
-                                <span class="shape-label">
-                                    Process
-                                </span>
-
-                            </div>
-
-
-                            <div class="node" draggable="true" ondragstart="drag(event)" data-node="decision">
-
-                                <span class="shape-icon">
-                                    <i class="bi bi-diamond shape-icon"></i>
-                                </span>
-
-                                <span class="shape-label">
-                                    Decision
-                                </span>
-
-                            </div>
-                            <div class="node" draggable="true" ondragstart="drag(event)" data-node="loop">
-
-                                <span class="shape-icon">
-                                    <i class="bi bi-arrow-repeat"></i>
-                                </span>
-
-                                <span class="shape-label">
-                                    Loop
-                                </span>
-
-                            </div>
-
-                            <div class="node" draggable="true" ondragstart="drag(event)" data-node="start">
-
-                                <span class="shape-icon">
-                                    <i class="bi bi-circle shape-icon"></i>
-                                </span>
-
-                                <span class="shape-label">
-                                    Start
-                                </span>
-
-                            </div>
-
-                            <div class="node" draggable="true" ondragstart="drag(event)" data-node="end">
-
-                                <span class="shape-icon">
-
-                                    <i class="bi bi-stop-circle"></i>
-
-                                </span>
-
-                                <span class="shape-label">
-
-                                    End
-
-                                </span>
-
-                            </div>
-
-
                         </div>
+                        <div class="heading-actions"><a class="btn btn-primary btn-sm" href="/workflowBuilder"><i
+                                    class="bi bi-person-plus" aria-hidden="true"></i> Add Workflow</a></div>
+                    </div>
 
-                        <!-- Canvas -->
-                        <div id="drawflow"></div>
+                    </section>
 
-                        <!-- Right Sidebar -->
-                        <div id="properties-panel">
-                            <h3>Node Properties</h3>
+                    <section class="panel mt-3">
 
-                            <label>Node Name</label>
-                            <input type="text" id="property_node_name">
 
-                            <br><br>
+                        <div class="workflow-container">
 
-                            <div class="d-flex justify-content-between align-items-center">
+                            <!-- Left Sidebar -->
+                            <div id="sidebar">
+                                <div class="workflow-name-container">
 
-                                <label>Code</label>
+                                    <label for="Workflow_name">
 
-                                <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal"
-                                    data-bs-target="#editorModal">
+                                        Workflow Name
 
-                                    <i class="bi bi-arrows-fullscreen"></i>
+                                    </label>
+
+                                    <input id="Workflow_name" type="text" placeholder="Enter Workflow Name" required>
+
+                                </div>
+                                <h4>Nodes</h4>
+
+                                <div class="node" draggable="true" ondragstart="drag(event)" data-node="process">
+
+                                    <span class="shape-icon">
+
+                                        <i class="bi bi-square shape-icon"></i>
+                                    </span>
+
+                                    <span class="shape-label">
+                                        Process
+                                    </span>
+
+                                </div>
+
+
+                                <div class="node" draggable="true" ondragstart="drag(event)" data-node="decision">
+
+                                    <span class="shape-icon">
+                                        <i class="bi bi-diamond shape-icon"></i>
+                                    </span>
+
+                                    <span class="shape-label">
+                                        Decision
+                                    </span>
+
+                                </div>
+                                <div class="node" draggable="true" ondragstart="drag(event)" data-node="loop">
+
+                                    <span class="shape-icon">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                    </span>
+
+                                    <span class="shape-label">
+                                        Loop
+                                    </span>
+
+                                </div>
+
+                                <div class="node" draggable="true" ondragstart="drag(event)" data-node="start">
+
+                                    <span class="shape-icon">
+                                        <i class="bi bi-circle shape-icon"></i>
+                                    </span>
+
+                                    <span class="shape-label">
+                                        Start
+                                    </span>
+
+                                </div>
+
+                                <div class="node" draggable="true" ondragstart="drag(event)" data-node="end">
+
+                                    <span class="shape-icon">
+
+                                        <i class="bi bi-stop-circle"></i>
+
+                                    </span>
+
+                                    <span class="shape-label">
+
+                                        End
+
+                                    </span>
+
+                                </div>
+
+
+                            </div>
+
+                            <!-- Canvas -->
+                            <div id="drawflow"></div>
+
+                            <!-- Right Sidebar -->
+                            <div id="properties-panel">
+                                <h3>Node Properties</h3>
+
+                                <label>Node Name</label>
+                                <input type="text" id="property_node_name">
+
+                                <br><br>
+
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <label>Code</label>
+
+                                    <button type="button" class="btn btn-sm btn-outline-info" data-bs-toggle="modal"
+                                        data-bs-target="#editorModal">
+
+                                        <i class="bi bi-arrows-fullscreen"></i>
+
+                                    </button>
+
+                                </div>
+
+                                <div id="monaco-editor"></div>
+
+                                <select id="script-language">
+
+                                    <option value="python">
+                                        Python
+                                    </option>
+
+                                    <option value="javascript">
+                                        JavaScript
+                                    </option>
+
+                                    <option value="sql">
+                                        SQL
+                                    </option>
+
+                                </select>
+
+                                <br><br>
+
+                                <label>Upload Script</label>
+
+                                <input type="file" id="property_script">
+
+                                <p id="currentScript">
+
+                                    No script uploaded
+
+                                </p>
+
+                                <br><br>
+
+                                <button id="saveNode">
+
+                                    Save Node
 
                                 </button>
 
                             </div>
 
-                            <div id="monaco-editor"></div>
-
-                            <select id="script-language">
-
-                                <option value="python">
-                                    Python
-                                </option>
-
-                                <option value="javascript">
-                                    JavaScript
-                                </option>
-
-                                <option value="sql">
-                                    SQL
-                                </option>
-
-                            </select>
-
-                            <br><br>
-
-                            <label>Upload Script</label>
-
-                            <input type="file" id="property_script">
-
-                            <p id="currentScript">
-
-                                No script uploaded
-
-                            </p>
-
-                            <br><br>
-
-                            <button id="saveNode">
-
-                                Save Node
-
-                            </button>
-
                         </div>
 
-                    </div>
+                    </section>
+                    <button class="btn btn-success" id="saveWorkflowBtn" onclick="saveWorkflow()">
 
-                </section>
-                <button class="btn btn-success" id="saveWorkflowBtn" onclick="saveWorkflow()">
+                        <i class="bi bi-save"></i>
+                        Save Workflow
 
-                    <i class="bi bi-save"></i>
-                    Save Workflow
-
-                </button>
+                    </button>
             </main>
 
             <footer class="admin-footer">

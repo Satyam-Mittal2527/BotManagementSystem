@@ -55,7 +55,7 @@ class DatabaseModule:
             return "New Bot Added"
 
         except Exception as e:
-            print("Error inserting bot:", str(e))
+            # print("Error inserting bot:", str(e))
             return str(e)
         finally:
             cursor.close()

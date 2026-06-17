@@ -88,7 +88,7 @@ class ScriptNode:
 
         for line in output.splitlines():
 
-            print(line)
+            # print(line)
 
             database.insert_log(
 

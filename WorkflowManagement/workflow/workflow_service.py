@@ -68,9 +68,9 @@ class WorkflowService:
 
             )
 
-            node["data"]["script_path"] = script_path
-            print(node_id)
-            print(node["data"]["script_path"])
+            # node["data"]["script_path"] = script_path
+            # print(node_id)
+            # print(node["data"]["script_path"])
 
             code = node["data"].get(
 
@@ -227,7 +227,7 @@ class WorkflowService:
             }
 
         except Exception as e:
-            print("Deleted Workflow Error:", str(e))
+            # print("Deleted Workflow Error:", str(e))
 
             return {
 

@@ -40,7 +40,7 @@ document.querySelectorAll(".run-btn").forEach(button => {
 
     button.addEventListener("click", async function () {
 
-        console.log("WorkflowID", this.dataset);
+
 
         const workflowId = this.dataset.workflowId;
 
@@ -116,15 +116,9 @@ async function deleteWorkflow(workflowId) {
 
 document.querySelectorAll(".view-btn").forEach(button => {
     button.addEventListener("click", async function () {
-        console.log("this =", this);
-        console.log("dataset =", this.dataset);
-        console.log("workflowName =", this.dataset.workflowName);
-        console.log("attribute =", this.getAttribute("data-workflow-name"));
+      
         const workflowName = this.dataset.workflowName;
-        console.log(
-            "Workflow Name:",
-            workflowName
-        )
+       
 
         const response = await fetch(
 

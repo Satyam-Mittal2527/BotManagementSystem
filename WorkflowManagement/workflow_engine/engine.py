@@ -10,9 +10,9 @@ class WorkflowEngine:
         workflow_id
     ):
 
-        print(
-            "==============Executing the code===================="
-        )
+        # print(
+        #     "==============Executing the code===================="
+        # )
 
         context = {}
 
@@ -61,15 +61,15 @@ class WorkflowEngine:
 
         while current_node:
 
-            print(
-                "Current node:",
-                current_node
-            )
+            # print(
+            #     "Current node:",
+            #     current_node
+            # )
 
-            print(
-                "Context =",
-                context
-            )
+            # print(
+            #     "Context =",
+            #     context
+            # )
 
             node = next(
 
@@ -103,20 +103,20 @@ class WorkflowEngine:
 
                 )
 
-            print(
-                "Executing node type:",
-                node["type"]
-            )
+            # print(
+            #     "Executing node type:",
+            #     node["type"]
+            # )
 
             node_class = NODE_MAP[
                 node["type"]
             ]
-            print("NODE DATA =", node["data"])
-            node_obj = node_class(
+            # print("NODE DATA =", node["data"])
+            # node_obj = node_class(
 
-                node["data"]
+            #     node["data"]
 
-            )
+            # )
 
             try:
 
@@ -144,25 +144,25 @@ class WorkflowEngine:
 
                 )
 
-                print(
-                    "Result =",
-                    result
-                )
+                # print(
+                #     "Result =",
+                #     result
+                # )
 
-                print(
-                    "Updated Context =",
-                    context
-                )
+                # print(
+                #     "Updated Context =",
+                #     context
+                # )
 
             except Exception as e:
 
-                print(
+                # print(
 
-                    "ERROR OCCURRED:",
+                #     "ERROR OCCURRED:",
 
-                    str(e)
+                #     str(e)
 
-                )
+                # )
 
                 database.insert_log(
 

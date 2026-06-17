@@ -257,7 +257,7 @@ class Database:
 class Bot:
     def __init__(self):
 
-        print("Running Bot")
+        # print("Running Bot")
 
 
         self.database = DatabaseModule()
@@ -265,15 +265,15 @@ class Bot:
     def monitor_process(self, process, botId, runID):
         try:
             for line in process.stdout:
-                print(line, end='')  
+                # print(line, end='')  
 
-                print(self.database.insert_logs(
+                self.database.insert_logs(
                     runID,
                     {
                         "status": "INFO",
                         "message": line.strip()
                     }
-                ))
+                )
 
             process.wait()
 
@@ -298,7 +298,7 @@ class Bot:
                 return "Completed process"
             else:
                 error = process.stderr.read()
-                print("Error ocuured during stop",error)
+                # print("Error ocuured during stop",error)
                 self.database.insert_logs(
                     runID,
                     {
@@ -317,7 +317,8 @@ class Bot:
                 )
                 return "Completed with error"
         except Exception as e:
-            print("Bank bot: error:",str(e))
+            # print("Bank bot: error:",str(e))
+            return 
     def run_bot(self, botPack):
 
         botId = botPack["botId"]
@@ -422,7 +423,7 @@ class Bot:
                 }
             )
 
-            print("Returned from database model",updateBot)
+            # print("Returned from database model",updateBot)
             return {
                 "status": "stopped",
                 "description": "Bot Stopped Successfully",
