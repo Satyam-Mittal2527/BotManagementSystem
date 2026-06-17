@@ -45,7 +45,7 @@ document.querySelectorAll(".run-btn").forEach(button => {
 
         const result = await response.json();
 
-        console.log(result);
+        // console.log(result);
 
         // Update UI immediately
         if (result.status === "Success") {
@@ -63,7 +63,7 @@ document.querySelectorAll(".run-btn").forEach(button => {
 
 document.querySelectorAll(".stop-btn").forEach(button => {
     button.addEventListener("click", async function (){
-        console.log("Stop button Data",this.dataset)
+        // console.log("Stop button Data",this.dataset)
         const botId = this.dataset.botId;
         
         const payload = {
@@ -78,9 +78,9 @@ document.querySelectorAll(".stop-btn").forEach(button => {
             body: JSON.stringify(payload)
         })
 
-        console.log("Request send stop success")
+        // console.log("Request send stop success")
         const result = await response.json();
-        console.log(result);
+        // console.log(result);
 
     });
 })
@@ -112,6 +112,6 @@ document.querySelectorAll(".view-btn").forEach(button => {
 
 });
 function ExportLogs(runId){
-    console.log(runId);
+    // console.log(runId);
     window.location.href = `/api/exportLogs/${runId}`;
 }

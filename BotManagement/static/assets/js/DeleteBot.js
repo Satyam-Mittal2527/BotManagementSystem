@@ -43,7 +43,7 @@ DeleteForm.addEventListener("submit", async function (event) {
 
         const result = await response.json();
 
-        console.log(result);
+        // console.log(result);
 
     } catch (error) {
         console.log(error);

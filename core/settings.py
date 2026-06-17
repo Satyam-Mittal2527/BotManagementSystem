@@ -121,3 +121,4 @@ STATIC_URL = 'static/'
 BOT_STORAGE_PATH = "/home/satyammittal/SanimaBots"
 DELETED_BOT_STORAGE_PATH = "/home/satyammittal/SanimaDeletedBots"
 WORKFLOW_STORAGE_PATH = "/home/satyammittal/WorkflowStorage"
+DELETED_WORKFLOW_PATH = "/home/satyammittal/DeletedWorkflowFolder"

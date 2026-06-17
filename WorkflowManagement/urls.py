@@ -9,7 +9,8 @@ urlpatterns = [
     path("delete/<int:workflow_id>/",views.delete_workflow),
     path("list/",views.get_all_workflows),
     path("dashboard/",views.get_dashboard),
-    path("upload_script/",views.UploadNodeScript),
-    path("logs/<int:workflow_run_id>/", views.getWorkflowLogs)
-
+    path("logs/<int:workflow_run_id>/", views.getWorkflowLogs),
+    path("view/<str:workflow_name>/",views.ViewWorkflow),
+    path("open_file/",views.open_file),
+    path("edit_file/",views.edit_file)
 ]

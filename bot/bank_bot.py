@@ -1,5 +1,5 @@
 from BotManagement.models import DatabaseModule
-from modules.log_module import LogModule
+
 from datetime import datetime
 import subprocess
 import psutil
@@ -15,11 +15,11 @@ class Database:
 
     def __init__(self):
 
-        print("BankBot constructor")
+        # print("BankBot constructor")
 
         self.database = DatabaseModule()
 
-        self.logger = LogModule()
+
    
     def Add_bot(self, package):
         response = self.database.insert_bot(package)
@@ -33,7 +33,7 @@ class Database:
     def get_bots(self):
 
         response = self.database.get_bots()
-        print(response)
+        # print(response)
         return response
     def get_active_bots(self):
 
@@ -142,7 +142,7 @@ class Database:
 
         for module in imports:
 
-            if module.startswith("TestHelper."):
+            if module.startswith("Helper."):
 
                 next_file = (
                     module.replace(
@@ -231,7 +231,7 @@ class Database:
 
         for module in imports:
 
-            if module.startswith("TestHelper."):
+            if module.startswith("Helper."):
 
                 file_name = (
                     module.replace(
@@ -246,7 +246,7 @@ class Database:
                     files,
                     visited
                 )
-        print("FILES:",files)
+        # print("FILES:",files)
         return {
             "files": files,
             "code": code,
@@ -323,8 +323,8 @@ class Bot:
         botId = botPack["botId"]
 
         bot = self.database.get_bot_toRun(botId)
-        print(bot)
-        print(type(bot))
+        # print(bot)
+        # print(type(bot))
         env = os.environ.copy()
         env["PYTHONPATH"] = project_root
 
@@ -377,7 +377,7 @@ class Bot:
                     "message": str(e)
                 }
             )
-            print("INSERTIG RUN CODE")
+            # print("INSERTIG RUN CODE")
             updateBot = self.database.updateColumns(
                 botId,
                 process.pid,
@@ -388,19 +388,19 @@ class Bot:
                 "description": str(e)
             }
     def stop_bot(self, botPack):
-        print("bankVbot stop call")
+        # print("bankVbot stop call")
         botId = botPack["botId"]
         try:
             bot = self.database.get_bot_toRun(botId)
             
             pid = bot["pid"]
-            print("Pid found",pid)
+            # print("Pid found",pid)
 
            
             
             process = psutil.Process(pid)
             process.terminate()
-            print("Process Terminatewd")
+            # print("Process Terminatewd")
             updateBot = self.database.updateColumns(
                 botId,
                 pid,

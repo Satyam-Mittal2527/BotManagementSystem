@@ -1,8 +1,8 @@
-console.log("main.js loaded");
+// console.log("main.js loaded");
 
 const BotForm = document.getElementById("NewBotForm");
 const BotMessage = document.querySelector(".NewBotAdditionResult")
-console.log(BotForm)
+// console.log(BotForm)
 function getCookie(name) {
 
     let cookieValue = null;
@@ -42,10 +42,10 @@ BotForm.addEventListener("submit", async function (event) {
     const scriptFile = document.getElementById("ScriptFile").files;
     const botFolder = document.getElementById("BotFolder").files;
     const helperFiles = document.getElementById("HelperFolder").files;
-    for (let i = 0; i < helperFiles.length; i++) {
-        console.log(helperFiles[i].name);
-        console.log(helperFiles[i].webkitRelativePath);
-    }
+    // for (let i = 0; i < helperFiles.length; i++) {
+    //     console.log(helperFiles[i].name);
+    //     console.log(helperFiles[i].webkitRelativePath);
+    // }
     for (let i = 0; i < helperFiles.length; i++) {
         formData.append("helper_files", helperFiles[i]);
         formData.append(
@@ -54,8 +54,8 @@ BotForm.addEventListener("submit", async function (event) {
         );
     }
 
-    console.log(helperFiles);
-    console.log(helperFiles.length);
+    // console.log(helperFiles);
+    // console.log(helperFiles.length);
     if (scriptFile.length > 0) {
 
         formData.append("upload_type", "file");
@@ -86,7 +86,7 @@ BotForm.addEventListener("submit", async function (event) {
 
         const result = await response.json();
 
-        console.log(result);
+        // console.log(result);
 
     } catch (error) {
         console.log(error);

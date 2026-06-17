@@ -18,7 +18,7 @@ class DatabaseModule:
     def insert_bot(self, package):
         conn = self.get_connection()
         cursor = conn.cursor()
-        print("Insert Bot Database models ")
+        # print("Insert Bot Database models ")
         first_name = package["first_name"]
         last_name = package["last_name"]
         bot_name = package["bot_name"]
@@ -85,7 +85,7 @@ class DatabaseModule:
         conn = self.get_connection()
         cursor = conn.cursor()
 
-        print("Reached Database Models")
+        # print("Reached Database Models")
 
         sql = """
         SELECT script_path, pid
@@ -128,7 +128,7 @@ class DatabaseModule:
 
             return cursor.fetchall()
         except Exception as e:
-            print(str(e))
+            # print(str(e))
             return str(e)
         finally:
             cursor.close()
@@ -146,7 +146,7 @@ class DatabaseModule:
 
             return cursor.fetchone()
         except Exception as e:
-            print(str(e))
+            # print(str(e))
             return str(e)
         finally:
             cursor.close()
@@ -164,7 +164,7 @@ class DatabaseModule:
 
             return cursor.fetchone()
         except Exception as e:
-            print(str(e))
+            # print(str(e))
             return str(e)
         finally:
             cursor.close()
@@ -187,7 +187,7 @@ class DatabaseModule:
             return "Updated database"
 
         except Exception as e:
-            print("Error in the database model", str(e))
+            # print("Error in the database model", str(e))
             return str(e)
 
         finally:
@@ -197,7 +197,7 @@ class DatabaseModule:
     def insert_logs(self, runId, log_data):
         conn = self.get_connection()
         cursor = conn.cursor()
-        print("Insert Logs in the database models reached")
+        # print("Insert Logs in the database models reached")
       
         status = log_data["status"]
         message  = log_data["message"]
@@ -222,11 +222,11 @@ class DatabaseModule:
         try:
             cursor.execute(sql, values)
             conn.commit()
-            print("Logs Added")
+            # print("Logs Added")
             return "Logs Added"
 
         except Exception as e:
-            print("Error inserting logs:", str(e))
+            # print("Error inserting logs:", str(e))
             return str(e)
         finally:
             cursor.close()
@@ -247,7 +247,7 @@ class DatabaseModule:
 
             return "Deleted Logs"
         except Exception as e:
-            print(str(e))
+            # print(str(e))
             return str(e)
         finally:
             cursor.close()
@@ -266,7 +266,7 @@ class DatabaseModule:
             rows = cursor.fetchall()
 
             logs = []
-            print(rows)
+            # print(rows)
             for row in rows:
                 logs.append({
                     "id": row[0],
@@ -281,7 +281,7 @@ class DatabaseModule:
             }
 
         except Exception as e:
-            print(str(e))
+            # print(str(e))
             return {
                 "bots": [],
                 "error": str(e)
@@ -293,7 +293,7 @@ class DatabaseModule:
     def insert_runs(self, botId, status):
         conn = self.get_connection()
         cursor = conn.cursor()
-        print("Inserting runs")
+        # print("Inserting runs")
         sql = """
             INSERT INTO BOT_RUNS
             (
@@ -314,7 +314,7 @@ class DatabaseModule:
 
             return cursor.lastrowid
         except Exception as e:
-            print("Error inserting Run", str(e))
+            # print("Error inserting Run", str(e))
             return str(e)
         finally:
             cursor.close()
@@ -342,7 +342,7 @@ class DatabaseModule:
     def update_run(self, runID, status):
         conn = self.get_connection()
         cursor = conn.cursor()
-        print("Reached Update run")
+        # print("Reached Update run")
         ended_at = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         sql = """
@@ -358,7 +358,7 @@ class DatabaseModule:
 
             return "UpdatedRuns"
         except Exception as e:
-            print("Error in the database runs model", str(e))
+            # print("Error in the database runs model", str(e))
             return str(e)
         finally:
             cursor.close()

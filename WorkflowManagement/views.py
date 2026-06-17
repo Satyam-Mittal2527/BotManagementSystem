@@ -1,12 +1,13 @@
-from workflow.workflow_service import WorkflowService
+from .workflow.workflow_service import WorkflowService
 import json
 import os
 from django.conf import settings
+from django.shortcuts import render
 from django.http import JsonResponse
 workflowService = WorkflowService()
 
 def run_workflow(request, workflow_id):
-    print("WorkflowID:", workflow_id)
+    # print("WorkflowID:", workflow_id)
     try:
 
         workflowService.run_workflow(
@@ -65,7 +66,7 @@ def save_workflow(request):
         body = json.loads(
             request.body
         )
-
+        print(body)
         workflow_id = workflowService.save_workflow(
 
             body["workflow_name"],
@@ -89,7 +90,7 @@ def save_workflow(request):
         )
 
     except Exception as e:
-
+        print(str(e))
         return JsonResponse(
 
             {
@@ -141,91 +142,109 @@ def get_dashboard(request):
         dashboard
     )
 
-def UploadNodeScript(request):
+# def UploadNodeScript(request):
 
-    try:
+#     try:
+#         print("==== UploadNodeScript called ====")\
 
-        node_id = request.POST["node_id"]
+#         node_id = request.POST["node_id"]
 
-        file = request.FILES["script"]
+#         workflow_name = request.POST["workflow_name"]
 
-        workflow_name = request.POST["workflow_name"]
+#         node_folder = os.path.join(
 
-        node_folder = os.path.join(
+#             settings.WORKFLOW_STORAGE_PATH,
 
-            settings.WORKFLOW_STORAGE_PATH,
+#             f"workflow_{workflow_name}",
 
-            f"workflow_{workflow_name}",
+#             f"node_{node_id}"
 
-            f"node_{node_id}"
+#         )
+#         print(node_folder)
+#         os.makedirs(
 
-        )
+#             node_folder,
 
+#             exist_ok=True
 
-        os.makedirs(
+#         )
 
-            node_folder,
+#         print("Folder created")
+#         destination_path = os.path.join(
 
-            exist_ok=True
+#             node_folder,
 
-        )
+#             "main.py"
 
+#         )
 
-        destination_path = os.path.join(
+#         # Case 1 : User uploaded a file
+#         if "script" in request.FILES:
 
-            node_folder,
+#             file = request.FILES["script"]
 
-            "main.py"
+#             with open(
 
-        )
+#                 destination_path,
 
+#                 "wb+"
 
-        with open(
+#             ) as destination:
 
-            destination_path,
+#                 for chunk in file.chunks():
 
-            "wb+"
+#                     destination.write(
 
-        ) as destination:
+#                         chunk
 
-            for chunk in file.chunks():
+#                     )
 
-                destination.write(
+#         # Case 2 : Monaco editor code
+#         else:
 
-                    chunk
+#             script_content = request.POST["script_content"]
 
-                )
-        
+#             with open(
 
-        return JsonResponse(
+#                 destination_path,
 
-            {
+#                 "w",
 
-                "status":"success",
+#                 encoding="utf-8"
 
-                "script_path":
+#             ) as destination:
 
-                destination_path
+#                 destination.write(
 
-            }
+#                     script_content
 
-        )
+#                 )
 
-    except Exception as e:
+#         return JsonResponse(
 
-        return JsonResponse(
+#             {
 
-            {
+#                 "status": "success",
 
-                "status":"error",
+#                 "script_path": destination_path
 
-                "message":
+#             }
 
-                str(e)
+#         )
 
-            }
+#     except Exception as e:
 
-        )
+#         return JsonResponse(
+
+#             {
+
+#                 "status": "error",
+
+#                 "message": str(e)
+
+#             }
+
+#         )
 
 def getWorkflowLogs(
 
@@ -233,7 +252,9 @@ def getWorkflowLogs(
 
     workflow_run_id
 
-):
+):  
+    print("Reached views")
+    print(workflow_run_id)
     logs = workflowService.getWorkflowLogs(workflow_run_id)
     
 
@@ -246,3 +267,163 @@ def getWorkflowLogs(
         }
 
     )
+
+def ViewWorkflow(
+
+    request,
+
+    workflow_name
+
+):
+
+    workflow_data =  workflowService.get_workflow_code(
+
+        workflow_name
+
+    )
+    workflow_data.update(
+
+        {
+
+            "bot_name": workflow_name
+
+        }
+
+    )   
+    return render(
+
+        request,
+
+        "ViewWorkflow.html",
+
+        workflow_data
+
+    )
+def open_file(request):
+
+    try:
+
+        body = json.loads(
+            request.body
+        )
+
+        print(body)
+
+        workflow_folder = os.path.join(
+
+            settings.WORKFLOW_STORAGE_PATH,
+
+            f"workflow_{body['workflow_name']}"
+
+        )
+
+        file_path = os.path.join(
+
+            workflow_folder,
+
+            body["file_path"]
+
+        )
+
+        print(file_path)
+
+        with open(
+
+            file_path,
+
+            "r"
+
+        ) as f:
+
+            code = f.read()
+
+        return JsonResponse(
+
+            {
+
+                "code": code
+
+            }
+
+        )
+
+    except Exception as e:
+
+        print("ERROR:", str(e))
+
+        return JsonResponse(
+
+            {
+
+                "status": "error",
+
+                "message": str(e)
+
+            }
+
+        )
+def edit_file(request):
+
+    body = json.loads(
+        request.body
+    )
+
+    workflow_folder = os.path.join(
+
+        settings.WORKFLOW_STORAGE_PATH,
+
+        f"workflow_{body['workflow_name']}"
+
+    )
+
+    file_path = os.path.join(
+
+        workflow_folder,
+
+        body["file_path"]
+
+    )
+
+    with open(
+
+        file_path,
+
+        "w"
+
+    ) as f:
+
+        f.write(
+
+            body["code"]
+
+        )
+
+    return JsonResponse(
+
+        {
+
+            "status": "success",
+
+            "message": "File updated successfully"
+
+        }
+
+    )
+def DeletedWorkflowPage(request):
+    deleted_path = settings.DELETED_WORKFLOW_PATH
+
+    deleted_bots = []
+    if(deleted_path): 
+        for item in os.listdir(deleted_path):
+            full_path = os.path.join(deleted_path, item)
+
+            if os.path.isdir(full_path):
+                deleted_bots.append(item)
+
+    # print(deleted_bots)
+
+    context = {
+    "deleted_bots": deleted_bots
+    }
+
+    return render(request, "deleted_workflow.html", context)

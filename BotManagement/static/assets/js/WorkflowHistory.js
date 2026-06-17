@@ -96,10 +96,10 @@ async function loadHistory() {
     document.querySelectorAll(".view-btn").forEach(button => {
 
         button.addEventListener("click", async function () {
-            console.log(this.dataset)
+            // console.log(this.dataset)
             const workflowRunId =
                 this.dataset.workflowRunid;
-            console.log(workflowRunId)
+            // console.log(workflowRunId)
             window.location.href =
 
                 `/workflowLogs/${workflowRunId}/`

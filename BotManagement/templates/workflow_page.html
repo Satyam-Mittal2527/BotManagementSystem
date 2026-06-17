@@ -7,7 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="adminHMD professional admin dashboard template">
-  <title>SANIMA| Bot Page</title>
+  <title>SANIMA| Workflow Page</title>
   <link rel="icon" type="image/png" href="{% static 'assets/images/favicon.png' %}">
   <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static 'assets/bootstrap-icons/bootstrap-icons.css' %}">
@@ -25,16 +25,13 @@
             <img class="company-logo" src="{% static 'assets/images/logo.jpeg' %}" alt="Sanima Logo">
           </div>
           <span class="brand-copy">
-            <span class="brand-title">SANIMA BOT</span>
-            <span class="brand-subtitle">SANIMA BOT</span>
+            <span class="brand-title">SANIMA BMS</span>
+            <span class="brand-subtitle">SANIMA BMS</span>
           </span>
         </a>
       </div>
       <nav class="sidebar-nav">
-        <!-- <a class="nav-link" href="/">
-          <span class="nav-icon"><i class="bi bi-speedometer2" aria-hidden="true"></i></span>
-          <span class="nav-text">Dashboard</span>
-        </a> -->
+
         <a class="nav-link" href="/botPage" aria-current="page">
           <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
           <span class="nav-text">Bots</span>
@@ -43,10 +40,7 @@
           <span class="nav-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
           <span class="nav-text">Add Bot</span>
         </a>
-        <!-- <a class="nav-link" href="/profile">
-          <span class="nav-icon"><i class="bi bi-person-badge" aria-hidden="true"></i></span>
-          <span class="nav-text">Profile</span>
-        </a> -->
+
         <a class="nav-link" href="/users">
           <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
           <span class="nav-text">Users</span>
@@ -56,113 +50,27 @@
           <span class="nav-text">Edit Bots</span>
         </a>
         <a class="nav-link" href="/DeleteBot">
-          <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
+          <span class="nav-icon"><i class="bi bi-trash" aria-hidden="true"></i></span>
           <span class="nav-text">Delete Bots</span>
         </a>
         <a class="nav-link" href="/workflowBuilder">
-          <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
-          <span class="nav-text">Workflow Builderr</span>
+          <span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+          <span class="nav-text">Workflow Builder</span>
         </a>
         <a class="nav-link active" href="/workflowPage">
-          <span class="nav-icon"><i class="bi bi-ui-checks-grid" aria-hidden="true"></i></span>
+          <span class="nav-icon"><i class="bi bi-bezier" aria-hidden="true"></i></span>
           <span class="nav-text">WorkFlow Page</span>
         </a>
-        <!-- <a class="nav-link" href="components.html">
-          <span class="nav-icon"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span>
-          <span class="nav-text">Components</span>
+        <a class="nav-link" href="/Deletedworkflows">
+          <span class="nav-icon"><i class="bi bi-trash" aria-hidden="true"></i></span>
+          <span class="nav-text">Deleted Workflows</span>
         </a>
-        <a class="nav-link" href="alerts.html">
-          <span class="nav-icon"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
-          <span class="nav-text">Alerts</span>
-        </a>
-        <a class="nav-link" href="modals.html">
-          <span class="nav-icon"><i class="bi bi-window-stack" aria-hidden="true"></i></span>
-          <span class="nav-text">Modals</span>
-        </a>
-        <a class="nav-link" href="settings.html">
-          <span class="nav-icon"><i class="bi bi-gear" aria-hidden="true"></i></span>
-          <span class="nav-text">Settings</span>
-        </a>
-        <a class="nav-link" href="blank.html">
-          <span class="nav-icon"><i class="bi bi-file-earmark" aria-hidden="true"></i></span>
-          <span class="nav-text">Blank Page</span>
-        </a>
-      </nav>
 
-      <div class="sidebar-user">
-        <img class="avatar-img avatar-md sidebar-user-avatar" src="../assets/images/avatar/avatar.jpg"
-          alt="Admin Hasan">
-        <strong>Admin Hasan</strong>
-        <small>Active Workspace</small>
-      </div>
-
-      <div class="sidebar-footer">
-        <span class="status-dot"></span>
-        <span class="sidebar-footer-text">System running smoothly</span>
-      </div> -->
     </aside>
 
     <div class="admin-main">
-      <!-- <nav class="navbar admin-navbar navbar-expand bg-white">
-        <div class="container-fluid px-3 px-lg-4">
-          <button class="sidebar-toggle" type="button" data-sidebar-toggle aria-controls="adminSidebar"
-            aria-expanded="true" aria-label="Toggle sidebar">
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
 
-          <form class="d-none d-md-flex ms-3 flex-grow-1" role="search">
-            <input class="form-control search-input" type="search" placeholder="Search users, roles, teams"
-              aria-label="Search">
-          </form>
-
-          <div class="navbar-actions ms-auto">
-            <button class="icon-button theme-toggle" type="button" data-theme-toggle aria-label="Switch color theme"
-              title="Switch color theme">
-              <i class="bi bi-moon-stars" data-theme-icon aria-hidden="true"></i>
-            </button>
-            <div class="dropdown">
-              <button class="icon-button" type="button" data-bs-toggle="dropdown" aria-expanded="false"
-                aria-label="Notifications">
-                <span class="notification-dot"></span>
-                <i class="bi bi-bell" aria-hidden="true"></i>
-              </button>
-              <div class="dropdown-menu dropdown-menu-end notification-menu">
-                <div class="dropdown-header fw-bold text-body">Notifications</div>
-                <a class="dropdown-item" href="users.html">
-                  <span class="notification-title">New user registered</span>
-                  <span class="notification-time">4 minutes ago</span>
-                </a>
-                <a class="dropdown-item" href="charts.html">
-                  <span class="notification-title">Revenue target reached</span>
-                  <span class="notification-time">32 minutes ago</span>
-                </a>
-                <a class="dropdown-item" href="settings.html">
-                  <span class="notification-title">Security review completed</span>
-                  <span class="notification-time">1 hour ago</span>
-                </a>
-              </div>
-            </div>
-
-            <div class="dropdown">
-              <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <img class="avatar-img avatar-sm" src="../assets/images/avatar/avatar.jpg" alt="Admin Hasan">
-                <span class="profile-name d-none d-sm-inline">Admin Hasan</span>
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                <li><a class="dropdown-item" href="settings.html">Account settings</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="login.html">Sign out</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav> -->
+      </nav>
 
       <main class="dashboard-content">
         <div class="container-fluid px-3 px-lg-4 py-4">
@@ -171,60 +79,27 @@
               <span class="page-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
               <div>
                 <p class="eyebrow mb-1">Management</p>
-                <h1 class="h3 mb-1">Bots</h1>
+                <h1 class="h3 mb-1">Workflows</h1>
               </div>
             </div>
-            <div class="heading-actions"><a class="btn btn-primary btn-sm" href="/workflowBuilder"><i class="bi bi-person-plus"
-                  aria-hidden="true"></i> Add Workflow</a></div>
+            <div class="heading-actions"><a class="btn btn-primary btn-sm" href="/workflowBuilder"><i
+                  class="bi bi-person-plus" aria-hidden="true"></i> Add Workflow</a></div>
           </div>
-
-          <section class="row g-3 mt-1" aria-label="User summary">
-            <div class="col-12 col-sm-6 col-xl-3">
-              <article class="metric-card metric-primary">
-                <div class="metric-top">
-                  <span class="metric-label">Total Bots</span>
-                  <span class="metric-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
-                </div>
-                <div class="metric-value">{{bots | length}}</div>
-
-              </article>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-              <article class="metric-card metric-success">
-                <div class="metric-top">
-                  <span class="metric-label">Active BOTS</span>
-                  <span class="metric-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></span>
-                </div>
-                <div class="metric-value">{{activeBots}}</div>
-              </article>
-            </div>
-
-            <div class="col-12 col-sm-6 col-xl-3">
-              <article class="metric-card metric-warning">
-                <div class="metric-top">
-                  <span class="metric-label">INACTIVE</span>
-                  <span class="metric-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></span>
-                </div>
-                <div class="metric-value">{{inactiveBots}}</div>
-              </article>
-            </div>
-
-          </section>
 
           <section class="panel mt-3">
             <div class="panel-header">
               <div>
-                <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>Bots List</span>
+                <h2 class="h5 mb-1 section-title"><i class="bi bi-table" aria-hidden="true"></i><span>Workflow
+                    List</span>
                 </h2>
                 <p class="text-muted mb-0">Search, review, and manage team member accounts.</p>
               </div>
               <div class="d-flex flex-wrap gap-2">
                 <input class="form-control form-control-sm table-search" type="search" placeholder="Search Workflow"
                   data-table-search="usersTable" aria-label="Search users">
-                 <div class="heading-actions"><a class="btn btn-primary btn-sm" href="/workflowBuilder"><i class="bi bi-person-plus"
-                  aria-hidden="true"></i> Add Workflow</a></div>
-          </div>
+                <div class="heading-actions"><a class="btn btn-primary btn-sm" href="/workflowBuilder"><i
+                      class="bi bi-person-plus" aria-hidden="true"></i> Add Workflow</a></div>
+              </div>
             </div>
             <div class="table-responsive">
               <table class="table align-middle mb-0" id="usersTable" data-searchable-table>
@@ -237,7 +112,7 @@
                     <th scope="col">Process</th>
                     <th scope="col">Process</th>
                     <th scope="col">Process</th>
-
+                    <th scope="col">Process</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -266,6 +141,12 @@
                         Delete
                       </button>
                     </td>
+                    <td>
+                      <button class="view-btn" data-workflow-name="{{ workflow.workflow_name }}">
+                        View
+                      </button>
+                    </td>
+
                     </td>
                   </tr>
                   {% endfor %}
@@ -278,12 +159,14 @@
 
       <footer class="admin-footer">
         <div class="container-fluid px-3 px-lg-4">
-          <span>Copyright 2026 SANIMA BOT.</span>
+          <span>Copyright 2026 SANIMA BMS.</span>
         </div>
       </footer>
     </div>
   </div>
-  <script src="{% static 'assets/js/workflow.js' %}"></script>
+
+
+  <script src="{% static 'assets/js/workflowPage.js' %}"></script>
   <script src="{% static 'assets/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'assets/js/main.js' %}"></script>
 

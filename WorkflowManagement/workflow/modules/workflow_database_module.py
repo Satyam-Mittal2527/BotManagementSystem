@@ -4,7 +4,7 @@ from datetime import datetime
 import json
 import mysql.connector
 class WorkflowDatabaseModule:
-    print("WORKFFLOW MODULE LOADED")
+    # print("WORKFFLOW MODULE LOADED")
     def __init__(self):
        pass
     def get_connection(self):
@@ -178,7 +178,7 @@ class WorkflowDatabaseModule:
         )
 
         nodes_result = cursor.fetchall()
-        print("nodes_result =", nodes_result)
+        # print("nodes_result =", nodes_result)
 
         nodes = []
 
@@ -280,18 +280,38 @@ class WorkflowDatabaseModule:
                 }
             )
 
-            # Insert edges
-            connections = node["outputs"]["output_1"]["connections"]
+            for output_name, output in node["outputs"].items():
 
-            for connection in connections:
+                for connection in output["connections"]:
 
-                self.insert_edge(
-                    workflow_id,
-                    {
+                    edge = {
+
                         "source": node["id"],
-                        "target": int(connection["node"])
+
+                        "target": int(
+                            connection["node"]
+                        )
+
                     }
-                )
+
+                    # Decision node
+                    if node["name"] == "decision":
+
+                        if output_name == "output_1":
+
+                            edge["label"] = "True"
+
+                        elif output_name == "output_2":
+
+                            edge["label"] = "False"
+
+                    self.insert_edge(
+
+                        workflow_id,
+
+                        edge
+
+        )
 
         return workflow_id
     def insert_workflow_run(self,workflow_id):
@@ -622,7 +642,7 @@ class WorkflowDatabaseModule:
                 "Deleted Logs"
             }
         except Exception as e:
-            print(str(e))
+            # print(str(e))
             return str(e)
         finally:
             cursor.close()
@@ -726,3 +746,47 @@ class WorkflowDatabaseModule:
         connection.close()
 
         return logs
+
+    def get_workflow_by_id(
+
+        self,
+
+        workflow_id
+
+    ):
+
+        conn = self.get_connection()
+
+        cursor = conn.cursor(
+
+            dictionary=True
+
+        )
+
+        cursor.execute(
+
+            """
+
+            SELECT *
+
+            FROM WORKFLOWS
+
+            WHERE id=%s
+
+            """,
+
+            (
+
+                workflow_id,
+
+            )
+
+        )
+
+        workflow = cursor.fetchone()
+
+        cursor.close()
+
+        conn.close()
+
+        return workflow

@@ -13,7 +13,7 @@ from openpyxl import Workbook
 def home(request):
     return render(request, "bot_dashboard.html")
 def addBot(request):
-    print("Got called add_bot page")
+    # print("Got called add_bot page")
     return render(request,"add_bot.html")
 def botPage(request):
     bot = Database()
@@ -28,7 +28,7 @@ def botPage(request):
         "activeBots": active_bots,
         "inactiveBots": inactive_bots
     }
-    print("CONTEXT",context)
+    # print("CONTEXT",context)
     return render(
         request,
         "bot_page.html",
@@ -38,14 +38,14 @@ def DeleteBotPage(request):
     deleted_path = settings.DELETED_BOT_STORAGE_PATH
 
     deleted_bots = []
+    if(deleted_path): 
+        for item in os.listdir(deleted_path):
+            full_path = os.path.join(deleted_path, item)
 
-    for item in os.listdir(deleted_path):
-        full_path = os.path.join(deleted_path, item)
+            if os.path.isdir(full_path):
+                deleted_bots.append(item)
 
-        if os.path.isdir(full_path):
-            deleted_bots.append(item)
-
-    print(deleted_bots)
+    # print(deleted_bots)
 
     context = {
     "deleted_bots": deleted_bots
@@ -99,7 +99,7 @@ def ViewFile(request):
 
         bot_data = bot.get_bot_by_name(bot_name)
 
-        if file_name.startswith("TestHelper/"):
+        if file_name.startswith("Helper/"):
 
             file_path = os.path.join(
                 settings.BOT_STORAGE_PATH,
@@ -166,7 +166,7 @@ def EditBot(request):
                 }
             )
 
-        if file_name.startswith("TestHelper/"):
+        if file_name.startswith("Helper/"):
 
             file_path = os.path.join(
                 settings.BOT_STORAGE_PATH,
@@ -315,7 +315,7 @@ def NewBot(request):
 
     except Exception as e:
 
-        print("ERROR:", str(e))
+        # print("ERROR:", str(e))
 
         return JsonResponse(
             {
@@ -330,8 +330,8 @@ def runBot(request):
         bot = Bot()
 
         response = bot.run_bot(data)
-        print(type(response))
-        print(response)
+        # print(type(response))
+        # print(response)
         return JsonResponse(response)
 def stopBot(request):
     try:
@@ -353,7 +353,7 @@ def stopBot(request):
         })
 
 def botRunDetails(request, botId):
-    print("botId",botId)
+    # print("botId",botId)
     dataBase = Database()
 
     response = dataBase.view_runs(botId)
@@ -394,16 +394,16 @@ def DeleteBot(request):
         for run in runs_data["bots"]:
             run_id = run["id"]
             DeleteLogResponse = bot.delete_logs(run_id)
-            print("Response fron delete Logs:", DeleteLogResponse)
+            # print("Response fron delete Logs:", DeleteLogResponse)
             
 
         DeleteRunsResponse  = bot.delete_runs(bot_id)
 
-        print("Response fron delete Logs:", DeleteLogResponse)
+        # print("Response fron delete Logs:", DeleteLogResponse)
 
         DeleteBots = bot.delete_bots(bot_name)
 
-        print("Response from delete Bots", DeleteBots)
+        # print("Response from delete Bots", DeleteBots)
 
         return JsonResponse({
             "status" : "Delete Complete",
@@ -422,7 +422,7 @@ def ExportLogs(request, run_id):
 
     logs = db.view_logs(run_id)
     
-    print(logs)
+    # print(logs)
     wb = Workbook()
     ws = wb.active
 
@@ -467,7 +467,7 @@ async def workflowPage(request):
         )
 
     workflows = response.json()
-    print("workflow:", workflows)
+    # print("workflow:", workflows)
     return render(
         request,
         "workflow_page.html",
@@ -512,7 +512,7 @@ def workflowDetails(
     )
 def workflowLogs(
     request,
-    workflowRun_id
+    workflow_run_id
 ):
 
     return render(
@@ -540,3 +540,21 @@ def workflowBuilder(request):
         "workflow_builder.html"
 
     )
+def DeletedWorkflowPage(request):
+    deleted_path = settings.DELETED_WORKFLOW_PATH
+
+    deleted_bots = []
+    if(deleted_path): 
+        for item in os.listdir(deleted_path):
+            full_path = os.path.join(deleted_path, item)
+
+            if os.path.isdir(full_path):
+                deleted_bots.append(item)
+
+    # print(deleted_bots)
+
+    context = {
+    "deleted_bots": deleted_bots
+    }
+
+    return render(request, "deleted_workflow.html", context)

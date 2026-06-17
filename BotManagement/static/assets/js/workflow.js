@@ -24,17 +24,173 @@ function getCookie(name) {
     return cookieValue;
 }
 let editor;
+let currentNode = null;
+let codeEditor = null;
 document.addEventListener("DOMContentLoaded", function () {
 
+    document
+        .getElementById(
+            "editorModal"
+        )
+        .addEventListener(
+
+            "shown.bs.modal",
+
+            function () {
+
+                largeEditor.setValue(
+
+                    codeEditor.getValue()
+
+                );
+
+                largeEditor.layout();
+
+            }
+
+        );
+
+
+    document
+        .getElementById(
+            "editorModal"
+        )
+        .addEventListener(
+
+            "hidden.bs.modal",
+
+            function () {
+
+                codeEditor.setValue(
+
+                    largeEditor.getValue()
+
+                );
+
+            }
+
+        );
     const drawflow = document.getElementById("drawflow");
 
-    console.log("drawflow =", drawflow);
+    // console.log("drawflow =", drawflow);
 
     editor = new Drawflow(drawflow);
 
     editor.start();
 
-    console.log(editor.precanvas);
+    require.config({
+
+        paths: {
+
+            vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs'
+
+        }
+
+    });
+
+    require(
+
+        ['vs/editor/editor.main'],
+
+        function () {
+
+            codeEditor = monaco.editor.create(
+
+                document.getElementById(
+                    'monaco-editor'
+                ),
+
+                {
+
+                    value: '',
+
+                    language: 'python',
+
+                    theme: 'vs-dark',
+
+                    automaticLayout: true,
+
+                    minimap: {
+
+                        enabled: false
+
+                    }
+
+                }
+
+            );
+            largeEditor = monaco.editor.create(
+
+                document.getElementById(
+
+                    "monaco-editor-large"
+
+                ),
+
+                {
+
+                    value: "",
+
+                    language: "python",
+
+                    theme: "vs-dark",
+
+                    automaticLayout: true
+
+                }
+
+            );
+
+            codeEditor.layout({
+                width: 250,
+                height: 250
+            });
+
+
+
+        }
+
+    );
+    editor.on("nodeSelected", function (id) {
+
+        currentNode = id;
+
+        document
+            .getElementById(
+                "properties-panel"
+            )
+            .classList.add(
+                "active"
+            );
+
+        let node =
+            editor.drawflow.drawflow.Home.data[id];
+
+        document
+            .getElementById(
+                "property_node_name"
+            )
+            .value =
+            node.data.node_name || "";
+
+        document
+            .getElementById(
+                "script-language"
+            )
+            .value =
+            node.data.language || "python";
+
+        if (codeEditor) {
+
+            codeEditor.setValue(
+
+                node.data.script_content || ""
+
+            );
+
+        }
+
+    });
 
     editor.precanvas.addEventListener("drop", drop);
 
@@ -62,7 +218,7 @@ function allowDrop(ev) {
 
 }
 function drop(ev) {
-    console.log("Dropped")
+    // console.log("Dropped")
 
     ev.preventDefault()
 
@@ -84,227 +240,350 @@ function drop(ev) {
 
 }
 function addNodeToDrawFlow(
-
     name,
-
     pos_x,
-
     pos_y
-
 ) {
 
-    const rect = editor.precanvas.getBoundingClientRect()
+    const rect =
+        editor.precanvas.getBoundingClientRect();
 
-    pos_x = pos_x - rect.x
+    pos_x -= rect.x;
+    pos_y -= rect.y;
 
-    pos_y = pos_y - rect.y
+    let html = "";
+
+    switch (name) {
+
+        case "process":
+
+            html = `
+            <div class="process-node">
+                <h5>Process</h5>
+            </div>
+            `;
+
+            break;
 
 
-    editor.addNode(
+        case "decision":
 
-        name,
+            html = `
+            <div class="decision-node">
+                Decision
+            </div>
+            `;
 
-        1,
 
-        1,
+            break;
 
-        pos_x,
 
-        pos_y,
+        case "start":
 
-        "script-node",
+            html = `
+            <div class="start-node">
+                Start
+            </div>
+            `;
 
-        {
+            break;
+        case "loop":
 
-            node_name: "",
-
-            script_name: "",
-
-            script_path: ""
-
-        },
-
-        `
-
-        <div class="script-node-content">
-
-            <h5>Script Node</h5>
-
-            <input
-
-                class="node-input"
-
-                type="text"
-
-                placeholder="Node Name"
-
-                style="width:100%"
-
-            >
-
-            <br><br>
-
-            <label class="node-button">
-
-                Upload Script
-
-                <input
-
-                    type="file"
-
-                    class="script-file"
-
-                    hidden
-
-                >
-
-            </label>
-
-            <p class="script-name">
-
-                No file selected
-
-            </p>
-
+            html = `
+        <div class="loop-node">
+            <i class="bi bi-arrow-repeat"></i>
         </div>
+    `;
 
-        `,
+            break;
+        case "end":
 
-        false
+            html = `
+        <div class="end-node">
+            End
+        </div>
+    `;
 
-    );
+            break;
+
+        default:
+
+            html = `
+            <div class="script-node-content">
+                <h5>Script Node</h5>
+            </div>
+            `;
+    }
+
+
+    if (name == "decision" || name == "loop") {
+
+        editor.addNode(
+
+            name,
+
+            1,
+
+            2,
+
+            pos_x,
+
+            pos_y,
+
+            name,
+
+            {
+                node_name: "",
+                script_content: "",
+                script_path: "",
+                language: "python"
+            },
+
+            html,
+
+            false
+
+        );
+
+    }
+    else if (name == "end") {
+
+        editor.addNode(
+
+            name,
+
+            1,
+
+            0,
+
+            pos_x,
+
+            pos_y,
+
+            name,
+
+            {
+                node_name: "",
+                script_content: "",
+                script_path: "",
+                language: "python"
+            },
+
+            html,
+
+            false
+
+        );
+
+    }
+    else {
+
+        editor.addNode(
+
+            name,
+
+            1,
+
+            1,
+
+            pos_x,
+
+            pos_y,
+
+            name,
+
+            {
+                node_name: "",
+                script_content: "",
+                script_path: "",
+                language: "python"
+            },
+
+            html,
+
+            false
+
+        );
+
+    }
 
 }
-document.addEventListener(
+document
+    .getElementById("script-language")
+    .addEventListener(
 
-    "change",
+        "change",
 
-    async function (event) {
+        function () {
 
-        if (
+            if (codeEditor) {
 
-            !event.target.classList.contains(
+                monaco.editor.setModelLanguage(
 
-                "script-file"
+                    codeEditor.getModel(),
 
-            )
-
-        ) {
-
-            return;
-
-        }
-
-
-        const file = event.target.files[0];
-
-
-        if (!file) {
-
-            return;
-
-        }
-
-
-        const nodeElement =
-
-            event.target.closest(
-
-                ".drawflow-node"
-
-            );
-
-
-        const nodeId = parseInt(
-
-            nodeElement.id.replace(
-
-                "node-",
-
-                ""
-
-            )
-
-        );
-
-
-        console.log(
-
-            "Node ID:",
-
-            nodeId
-
-        );
-
-
-        const scriptNameElement =
-
-            event.target
-
-                .closest(
-
-                    ".script-node-content"
-
-                )
-
-                .querySelector(
-
-                    ".script-name"
+                    this.value
 
                 );
 
+            }
 
-        scriptNameElement.innerText =
+            if (currentNode) {
 
-            file.name;
+                editor.drawflow.drawflow.Home.data[
+                    currentNode
+                ].data.language =
+                    this.value;
 
-        let node = editor.getNodeFromId(
-            nodeId
-        );
-        const workflowName = document.querySelector("#Workflow_name").value;
-        console.log(
-            "Node:",
-            node
-        );
-
-        if (node) {
-
-            editor.drawflow.drawflow.Home.data[
-                nodeId
-            ].data.script_name =
-                file.name;
+            }
 
         }
 
-        console.log(
-            editor.export()
+    );
+document
+    .getElementById("property_script")
+    .addEventListener(
+        "change",
+        async function () {
+
+            if (!currentNode)
+                return;
+
+            const workflowName =
+                document.querySelector(
+                    "#Workflow_name"
+                ).value.trim();
+
+            if (!workflowName) {
+
+                alert(
+                    "Please enter a workflow name first."
+                );
+
+                this.value = "";
+
+                return;
+            }
+
+            const file = this.files[0];
+
+            if (!file)
+                return;
+
+            let formData = new FormData();
+
+            formData.append(
+                "script",
+                file
+            );
+
+            formData.append(
+                "workflow_name",
+                workflowName
+            );
+
+            formData.append(
+                "node_id",
+                currentNode
+            );
+
+            let node =
+                editor.getNodeFromId(
+                    currentNode
+                );
+
+            node.data.script_name =
+                file.name;
+
+            node.data.script_path =
+                result.script_path;
+        }
+    );
+async function saveWorkflow() {
+
+    const name =
+        document
+            .querySelector(
+                "#Workflow_name"
+            )
+            .value
+            .trim();
+
+    if (!name) {
+
+        alert(
+            "Please enter a Workflow Name."
         );
 
-        let formData = new FormData();
+        return;
+    }
 
-        formData.append(
-            "script",
-            file
+    const workflow =
+        editor.export();
+
+    const nodes =
+        Object.values(
+            workflow.drawflow.Home.data
         );
 
-        formData.append(
-            "workflow_name",
-            workflowName
+    // Check Start Node
+    const startNodes =
+        nodes.filter(
+            node =>
+                node.name === "start"
         );
 
-        formData.append(
-            "node_id",
-            nodeId
-        );
-        const response = await fetch(
+    if (startNodes.length === 0) {
 
-            "/workflow/upload_script/",
+        alert(
+            "Workflow must contain one Start Node."
+        );
+
+        return;
+    }
+
+    if (startNodes.length > 1) {
+
+        alert(
+            "Workflow cannot contain more than one Start Node."
+        );
+
+        return;
+    }
+
+    // Check End Node
+    const endNodes =
+        nodes.filter(
+            node =>
+                node.name === "end"
+        );
+
+    if (endNodes.length === 0) {
+
+        alert(
+            "Workflow must contain one End Node."
+        );
+
+        return;
+    }
+
+    console.log(
+        workflow
+    );
+
+    const response =
+        await fetch(
+
+            "/workflow/save/",
 
             {
 
                 method: "POST",
 
                 headers: {
+
+                    "Content-Type":
+                        "application/json",
 
                     "X-CSRFToken":
                         getCookie(
@@ -313,228 +592,121 @@ document.addEventListener(
 
                 },
 
-                body: formData
+                body: JSON.stringify(
+
+                    {
+
+                        workflow_name:
+                            name,
+
+                        description:
+                            "Created From Builder",
+
+                        workflow:
+                            workflow
+
+                    }
+
+                )
 
             }
 
         );
 
+    const result =
+        await response.json();
 
-        const result =
-            await response.json();
+    if (
+        result.status ===
+        "success"
+    ) {
 
-        console.log(
-            result
-        );
-
-
-        if (node) {
-
-            editor.drawflow.drawflow.Home.data[
-                nodeId
-            ].data.script_path =
-                result.script_path;
-
-        }
-
-        console.log(
-            editor.export()
+        alert(
+            "Workflow Saved Successfully"
         );
 
     }
 
+    else {
 
-);
-document.addEventListener(
+        alert(
+            result.message
+        );
 
-    "input",
+    }
 
-    function (event) {
+}
+document
+    .getElementById("saveNode")
+    .addEventListener("click", function () {
 
-        if (
-
-            !event.target.classList.contains(
-
-                "node-input"
-
-            )
-
-        ) {
-
+        if (currentNode == null)
             return;
 
-        }
+        const workflowName =
+            document
+                .getElementById(
+                    "Workflow_name"
+                )
+                .value
+                .trim();
 
+        if (!workflowName) {
 
-        const nodeElement =
-
-            event.target.closest(
-
-                ".drawflow-node"
-
+            alert(
+                "Please enter a Workflow Name before saving nodes."
             );
 
+            document
+                .getElementById(
+                    "Workflow_name"
+                )
+                .focus();
 
-        const nodeId = parseInt(
+            return;
+        }
 
-            nodeElement.id.replace(
+        let node =
+            editor.drawflow.drawflow.Home.data[
+            currentNode
+            ];
 
-                "node-",
+        node.data.node_name =
+            document
+                .getElementById(
+                    "property_node_name"
+                )
+                .value;
 
-                ""
+        node.data.language =
+            document
+                .getElementById(
+                    "script-language"
+                )
+                .value;
 
-            )
+        if (codeEditor) {
 
-        );
-
-
-        editor.drawflow.drawflow.Home.data[
-            nodeId
-        ].data.node_name =
-
-            event.target.value;
-
-    }
-
-);
-async function saveWorkflow() {
-
-    let data = editor.export()
-    const name = document.querySelector("#Workflow_name").value;
-    console.log(data)
-
-    await fetch(
-
-        "/workflow/save/",
-
-        {
-
-            method: "POST",
-
-            headers: {
-
-                "Content-Type": "application/json",
-
-                "X-CSRFToken": getCookie('csrftoken')
-
-            },
-
-            body: JSON.stringify(
-
-                {
-
-                    workflow_name: name,
-
-                    description: "Created From Builder",
-
-                    workflow: data
-
-                }
-
-            )
+            node.data.script_content =
+                codeEditor.getValue();
 
         }
 
-    )
+        const titleElement =
+            document.querySelector(
+                `#node-${currentNode} h5`
+            );
 
-    alert(
+        if (titleElement) {
 
-        "Workflow Saved"
+            titleElement.innerText =
+                node.data.node_name ||
+                "Script Node";
 
-    )
+        }
 
-}
-async function runWorkflow(workflowId) {
-
-    await fetch(
-
-        `/workflow/run/${workflowId}/`
-
-    )
-
-    alert(
-        "Workflow Started"
-    )
-
-}
-document.querySelectorAll(".run-btn").forEach(button => {
-
-    button.addEventListener("click", async function () {
-
-        console.log("WorkflowID", this.dataset);
-
-        const workflowId = this.dataset.workflowId;
-
-        const run_btn = this;
-
-        // Change appearance while running
-        run_btn.innerHTML = "RUNNING";
-        run_btn.style.backgroundColor = "green";
-        run_btn.disabled = true;
-
-        const response = await fetch(
-            `/workflow/run/${workflowId}`
+        alert(
+            "Node saved successfully!"
         );
 
-        const result = await response.json();
-
-        console.log(result);
-
-        // Restore button
-        run_btn.innerHTML = "RUN";
-        run_btn.style.backgroundColor = "";
-        run_btn.disabled = false;
-
-        alert("Workflow Execution Complete");
-
     });
-
-});
-
-document.querySelectorAll(".delete-btn").forEach(button => {
-
-    button.addEventListener("click", async function () {
-
-        console.log("WorkflowID", this.dataset)
-        const workflowId = this.dataset.workflowId;
-
-
-        const response = await fetch(
-            `/workflow/delete/${workflowId}/`
-        )
-
-        const result = await response.json();
-
-        console.log(result);
-
-        // Update UI immediately
-        alert("Workflow Deleted")
-    });
-
-});
-
-function viewHistory(workflowId) {
-    console.log(workflowId)
-
-    window.location.href =
-
-        `/workflowHistory/${workflowId}/`
-
-}
-
-
-async function deleteWorkflow(workflowId) {
-
-    await fetch(
-
-        `/workflow/delete/${workflowId}/`
-
-    )
-
-    loadWorkflows()
-
-}
-
-
-
-

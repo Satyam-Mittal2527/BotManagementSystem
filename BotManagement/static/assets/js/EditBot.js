@@ -56,7 +56,7 @@ EditBotForm.addEventListener("submit", async function (event) {
 
         const result = await response.json();
 
-        console.log(result);
+        // console.log(result);
 
     }
     catch(error){
@@ -104,7 +104,7 @@ document.querySelectorAll(".file-btn").forEach(button => {
 
             const result = await response.json();
 
-            console.log(result);
+            // console.log(result);
 
             if (result.status === "success") {
 
@@ -186,7 +186,7 @@ EditBotForm.addEventListener(
             const result =
                 await response.json();
 
-            console.log(result);
+            // console.log(result);
 
         }
         catch (error) {

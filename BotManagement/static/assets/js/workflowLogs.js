@@ -11,7 +11,7 @@ async function loadLogs() {
 
     let data = await response.json()
 
-    console.log(data)
+    // console.log(data)
 
     let logsDiv = document.getElementById(
 
