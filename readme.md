@@ -1,185 +1,194 @@
-# Workflow Management System
+# SANIMABA - Bot Management and Workflow Automation Platform
 
-A Django-based workflow automation platform inspired by tools like n8n and Node-RED. Users can visually create workflows, attach Python scripts to nodes, execute workflows, monitor execution history, and manage workflow files through an integrated editor.
+A Django-based automation platform developed during the internship at **Sanima Bank**. The project provides two major modules:
 
----
-
-## Features
-
-* Visual workflow builder
-* Start, Process, Condition, Loop and End nodes
-* Python script execution inside nodes
-* Shared context between nodes
-* Workflow execution history
-* Node execution logs
-* File explorer for workflow scripts
-* Edit workflow scripts directly from UI
-* Archive deleted workflows
-* Workflow persistence in MySQL
-* Folder-based code storage
-* Dynamic workflow execution engine
+* **Bot Management System**
+* **Workflow Builder and Execution Engine**
 
 ---
 
-## Architecture
+# Features
 
-### Workflow Metadata
+## Bot Management
 
-Stored in MySQL:
-
-* Workflow name
-* Nodes
-* Edges
-* Node types
-* Script paths
-
-### Workflow Code
-
-Stored in the file system:
-
-```text
-WorkflowStorage/
-└── workflow_MyWorkflow
-    ├── node_1
-    │   └── main.py
-    ├── node_2
-    │   └── main.py
-    └── node_3
-        └── main.py
-```
-
-### Runtime Context
-
-Variables are shared between nodes through a common execution context:
-
-```python
-name = "Satyam"
-
-# Node 2
-print(name)
-```
+* Create and register bots
+* Upload Python bot folders
+* Start bots
+* Stop bots
+* Monitor bot status
+* Store process IDs
+* Real-time logging
+* Execution history
+* Export logs to Excel
+* Delete bots
+* Archive deleted bots
 
 ---
 
-## Tech Stack
+## Workflow Builder
+
+* Drag-and-drop workflow design
+* Start Node
+* Process Node
+* Condition Node
+* Loop Node
+* End Node
+
+---
+
+## Workflow Engine
+
+* Graph-based execution
+* Shared runtime context
+* Variable passing between nodes
+* Sequential execution
+* Conditional branching
+* Execution history
+* Node-level logs
+
+---
+
+## Workflow File Explorer
+
+* View workflow files
+* Edit node scripts
+* Dynamic file loading
+* Save modifications directly to disk
+
+---
+
+# Tech Stack
 
 ### Backend
 
 * Python
 * Django
+
+### Database
+
+* SQLite
 * MySQL
 
 ### Frontend
 
 * HTML
 * CSS
-* JavaScript
 * Bootstrap
+* JavaScript
+
+### Workflow Builder
+
 * Drawflow
 
 ---
 
-## Project Structure
+# Project Structure
 
 ```text
-WorkflowManagement/
+SANIMABA
 │
-├── workflow/
+├── bot/
+│   ├── __init__.py
+│   └── bank_bot.py
 │
-├── workflow_engine/
-│   ├── engine.py
-│   ├── registry.py
-│   └── nodes/
-│       ├── script_node.py
-│       ├── condition_node.py
-│       ├── loop_node.py
-│       └── end_node.py
+├── BotManagement/
+│   ├── static/
+│   ├── templates/
+│   ├── views.py
+│   ├── urls.py
+│   ├── models.py
+│   └── admin.py
 │
-├── templates/
-├── static/
-├── views.py
-├── urls.py
+├── WorkflowManagement/
+│   ├── workflow/
+│   │
+│   ├── workflow_engine/
+│   │   ├── engine.py
+│   │   ├── registry.py
+│   │   └── nodes/
+│   │       ├── script_node.py
+│   │       ├── condition_node.py
+│   │       ├── loop_node.py
+│   │       ├── end_node.py
+│   │       └── ...
+│   │
+│   ├── views.py
+│   └── urls.py
+│
+├── core/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+│
+├── manage.py
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## Installation
+# Workflow Storage
 
-### Clone Repository
+```text
+WorkflowStorage/
+
+workflow_TestWorkflow/
+
+    node_1/
+        main.py
+
+    node_2/
+        main.py
+
+    node_3/
+        main.py
+```
+
+---
+
+# Deleted Workflow Storage
+
+```text
+DeletedWorkflowFolder/
+
+workflow_TestWorkflow/
+```
+
+---
+
+# Installation
+
+## Clone Repository
 
 ```bash
 git clone <repository-url>
-cd <project-folder>
+cd SANIMABA
 ```
 
----
+## Create Virtual Environment
 
-### Create Virtual Environment
-
-#### Windows
+### Windows
 
 ```bash
 python -m venv venv
 venv\Scripts\activate
 ```
 
-#### Linux
+### Linux
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
----
-
-### Install Dependencies
+## Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## Configure Database
-
-Update `settings.py`:
-
-```python
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "your_database",
-        "USER": "your_username",
-        "PASSWORD": "your_password",
-        "HOST": "localhost",
-        "PORT": "3306"
-    }
-}
-```
-
----
-
-## Configure Storage Paths
-
-In `settings.py`:
-
-```python
-WORKFLOW_STORAGE_PATH = "/path/to/WorkflowStorage"
-
-DELETED_WORKFLOW_PATH = "/path/to/DeletedWorkflowFolder"
-```
-
----
-
-## Run Migrations
-
-```bash
-python manage.py migrate
-```
-
----
-
-## Start Server
+## Run Server
 
 ```bash
 python manage.py runserver
@@ -187,76 +196,23 @@ python manage.py runserver
 
 ---
 
-## Workflow Execution Flow
+# Future Improvements
 
-```text
-Start Node
-      ↓
-Process Node
-      ↓
-Condition Node
-   ↙        ↘
-True       False
- ↓            ↓
-Process     Process
-      ↓
-End Node
-```
-
----
-
-## Editing Workflow Files
-
-Scripts are stored inside:
-
-```text
-WorkflowStorage/
-```
-
-Example:
-
-```text
-workflow_TestWorkflow/
-    node_1/main.py
-    node_2/main.py
-    node_3/main.py
-```
-
-The workflow engine always executes the latest file contents.
-
----
-
-## Deleting Workflows
-
-Deleted workflows are moved to:
-
-```text
-DeletedWorkflowFolder/
-```
-
-instead of being permanently removed.
-
----
-
-## Future Improvements
-
-* Drag and drop workflow builder
-* API nodes
-* Delay nodes
-* Parallel execution
-* Scheduler support
-* Cron jobs
-* Variable nodes
-* Email nodes
-* Webhook nodes
-* Restore deleted workflows
-* Docker deployment
+* API Nodes
+* Delay Nodes
+* Email Nodes
+* Scheduler Support
+* Parallel Execution
+* Docker Support
+* Webhooks
 * Multi-user support
-* Role-based access control
+* Authentication and Authorization
+* Restore Deleted Workflows
+* Role-Based Access Control
 
 ---
 
-## Author
+# Author
 
 **Satyam Mittal**
-
+www.linkedin.com/in/satyam-mittal2527
