@@ -1,4 +1,4 @@
-# SANIMA - Bot Management and Workflow Automation Platform
+# SANIMA - Bot Management System
 
 A Django-based automation platform developed during the internship at **Sanima Bank**. The project provides two major modules:
 
