@@ -415,22 +415,6 @@ python manage.py runserver
 
 ---
 
-# Future Improvements
-
-* API Nodes
-* Delay Nodes
-* Email Nodes
-* Scheduler Support
-* Parallel Execution
-* Docker Support
-* Webhooks
-* Multi-user support
-* Authentication and Authorization
-* Restore Deleted Workflows
-* Role-Based Access Control
-
----
-
 # Author
 
 **Satyam Mittal**
