@@ -11,6 +11,7 @@ from openpyxl import Workbook
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from WorkflowManagement.workflow.workflow_service import WorkflowService
 
 
 @login_required
@@ -496,16 +497,12 @@ def ExportLogs(request, run_id):
 
     return response
 
+
+
+workflowService = WorkflowService()
+
 def workflowPage(request):
-
-    response = httpx.get(
-        "http://127.0.0.1:8000/workflow/list/"
-    )
-
-    try:
-        workflows = response.json()
-    except:
-        workflows = []
+    workflows = workflowService.get_all_workflows()
 
     return render(
         request,

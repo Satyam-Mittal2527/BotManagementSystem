@@ -152,15 +152,16 @@ def get_history(request, workflow_id):
     raise_exception=True
 )
 def get_all_workflows(request):
+    print(request.user)
+    print(request.user.is_authenticated)
+    print(request.user.is_superuser)
+    print(request.user.has_perm("accounts.view_workflow"))
 
     workflows = workflowService.get_all_workflows()
 
     return JsonResponse(
-
         workflows,
-
         safe=False
-
     )
 
 @permission_required(
