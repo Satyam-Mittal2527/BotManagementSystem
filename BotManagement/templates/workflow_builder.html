@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="{% static 'assets/bootstrap-icons/bootstrap-icons.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.css">
-
     <script src="https://cdn.jsdelivr.net/gh/jerosoler/Drawflow/dist/drawflow.min.js"></script>
     <style>
         .workflow-container {
@@ -304,36 +303,84 @@
             </div>
             <nav class="sidebar-nav">
 
+                {% if perms.accounts.view_bot %}
                 <a class="nav-link" href="/botPage" aria-current="page">
-                    <span class="nav-icon"><i class="bi bi-people" aria-hidden="true"></i></span>
+                    <span class="nav-icon">
+                        <i class="bi bi-people" aria-hidden="true"></i>
+                    </span>
                     <span class="nav-text">Bots</span>
                 </a>
+                {% endif %}
+                {% if perms.accounts.create_bot %}
                 <a class="nav-link" href="/addBot">
-                    <span class="nav-icon"><i class="bi bi-person-plus" aria-hidden="true"></i></span>
+                    <span class="nav-icon">
+                        <i class="bi bi-person-plus" aria-hidden="true"></i>
+                    </span>
                     <span class="nav-text">Add Bot</span>
                 </a>
+                {% endif %}
 
+                {% if perms.accounts.manage_users %}
                 <a class="nav-link" href="/users">
-                    <span class="nav-icon"><i class="bi bi-bar-chart-line" aria-hidden="true"></i></span>
+                    <span class="nav-icon">
+                        <i class="bi bi-bar-chart-line" aria-hidden="true"></i>
+                    </span>
                     <span class="nav-text">Users</span>
                 </a>
-
+                {% endif %}
+                {% if perms.accounts.delete_bot %}
                 <a class="nav-link" href="/DeleteBot">
-                    <span class="nav-icon"><i class="bi bi-trash" aria-hidden="true"></i></span>
+                    <span class="nav-icon">
+                        <i class="bi bi-trash" aria-hidden="true"></i>
+                    </span>
                     <span class="nav-text">Delete Bots</span>
                 </a>
-                <a class="nav-link" href="/workflowBuilder">
-                    <span class="nav-icon"><i class="bi bi-diagram-3" aria-hidden="true"></i></span>
+                {% endif %}
+                {% if perms.accounts.edit_workflow %}
+                <a class="nav-link active" href="/workflowBuilder">
+                    <span class="nav-icon">
+                        <i class="bi bi-diagram-3" aria-hidden="true"></i>
+                    </span>
                     <span class="nav-text">Workflow Builder</span>
                 </a>
+                {% endif %}
+                {% if perms.accounts.view_workflow %}
                 <a class="nav-link" href="/workflowPage">
-                    <span class="nav-icon"><i class="bi bi-bezier" aria-hidden="true"></i></span>
-                    <span class="nav-text">WorkFlow Page</span>
+                    <span class="nav-icon">
+                        <i class="bi bi-bezier" aria-hidden="true"></i>
+                    </span>
+                    <span class="nav-text">Workflow Page</span>
                 </a>
+                {% endif %}
+                {% if perms.accounts.delete_workflow %}
                 <a class="nav-link" href="/Deletedworkflows">
-                    <span class="nav-icon"><i class="bi bi-trash" aria-hidden="true"></i></span>
+                    <span class="nav-icon">
+                        <i class="bi bi-trash" aria-hidden="true"></i>
+                    </span>
                     <span class="nav-text">Deleted Workflows</span>
                 </a>
+                {% endif %}
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle d-flex align-items-center gap-2" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        {{ request.user.username }}
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item text-danger" href="/logout">
+                                <i class="bi bi-box-arrow-right"></i>
+                                Logout
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
 
         </aside>
 
@@ -510,12 +557,14 @@
                         </div>
 
                     </section>
+                    {% if perms.accounts.edit_workflow %}
                     <button class="btn btn-success" id="saveWorkflowBtn" onclick="saveWorkflow()">
 
                         <i class="bi bi-save"></i>
                         Save Workflow
 
                     </button>
+                    {% endif %}
             </main>
 
             <footer class="admin-footer">

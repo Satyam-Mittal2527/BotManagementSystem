@@ -25,11 +25,12 @@ function getCookie(name) {
 }
 
 document.querySelectorAll(".run-btn").forEach(button => {
+    console.log("Clicked run")
 
     button.addEventListener("click", async function () {
 
         const botId = this.dataset.botId;
-  
+
         const payload = {
             botId
         };
@@ -62,16 +63,16 @@ document.querySelectorAll(".run-btn").forEach(button => {
 });
 
 document.querySelectorAll(".stop-btn").forEach(button => {
-    button.addEventListener("click", async function (){
+    button.addEventListener("click", async function () {
         // console.log("Stop button Data",this.dataset)
         const botId = this.dataset.botId;
-        
+
         const payload = {
             botId
         }
         const response = await fetch("/api/stopBot", {
             method: "POST",
-            headers : {
+            headers: {
                 "Content-Type": "application/json",
                 "X-CSRFToken": getCookie("csrftoken")
             },
@@ -111,7 +112,33 @@ document.querySelectorAll(".view-btn").forEach(button => {
     });
 
 });
-function ExportLogs(runId){
+
+document.querySelectorAll(".delete-btn").forEach(button => {
+
+    button.addEventListener("click", async function () {
+
+        const botName = this.dataset.botName;
+        const formData = new FormData();
+
+        formData.append("bot_name", botName);
+
+        const response = await fetch("/api/DeleteBot", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": getCookie("csrftoken")
+            },
+            body: formData
+        });
+        const html = await response.text();
+
+        document.open();
+        document.write(html);
+        document.close();
+
+    });
+
+});
+function ExportLogs(runId) {
     // console.log(runId);
     window.location.href = `/api/exportLogs/${runId}`;
 }

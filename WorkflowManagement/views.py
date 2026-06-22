@@ -4,8 +4,15 @@ import os
 from django.conf import settings
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.contrib.auth.decorators import permission_required
+
 workflowService = WorkflowService()
 
+
+@permission_required(
+    "accounts.run_workflow",
+    raise_exception=True
+)
 def run_workflow(request, workflow_id):
     # print("WorkflowID:", workflow_id)
     try:
@@ -28,6 +35,10 @@ def run_workflow(request, workflow_id):
                 "message": str(e)
             }
         )
+@permission_required(
+    "accounts.view_workflow",
+    raise_exception=True
+)
 def get_workflow(request, workflow_id):
 
     try:
@@ -50,7 +61,10 @@ def get_workflow(request, workflow_id):
         )
 
 
-
+@permission_required(
+    "accounts.edit_workflow",
+    raise_exception=True
+)
 def save_workflow(request):
 
     if request.method != "POST":
@@ -102,6 +116,10 @@ def save_workflow(request):
             }
 
         )
+@permission_required(
+    "accounts.delete_workflow",
+    raise_exception=True
+)
 def delete_workflow(request, workflow_id):
 
     workflowService.delete_workflow(
@@ -113,6 +131,11 @@ def delete_workflow(request, workflow_id):
             "status": "success"
         }
     )
+
+@permission_required(
+    "accounts.view_workflow",
+    raise_exception=True
+)
 def get_history(request, workflow_id):
 
     history = workflowService.get_history(
@@ -123,6 +146,11 @@ def get_history(request, workflow_id):
         history
     )
 
+
+@permission_required(
+    "accounts.view_workflow",
+    raise_exception=True
+)
 def get_all_workflows(request):
 
     workflows = workflowService.get_all_workflows()
@@ -134,6 +162,11 @@ def get_all_workflows(request):
         safe=False
 
     )
+
+@permission_required(
+    "accounts.view_workflow",
+    raise_exception=True
+)
 def get_dashboard(request):
 
     dashboard = workflowService.get_dashboard()
@@ -246,6 +279,10 @@ def get_dashboard(request):
 
 #         )
 
+@permission_required(
+    "accounts.view_logs",
+    raise_exception=True
+)
 def getWorkflowLogs(
 
     request,
@@ -268,6 +305,11 @@ def getWorkflowLogs(
 
     )
 
+
+@permission_required(
+    "accounts.view_workflow",
+    raise_exception=True
+)
 def ViewWorkflow(
 
     request,
@@ -299,6 +341,11 @@ def ViewWorkflow(
         workflow_data
 
     )
+
+@permission_required(
+    "accounts.view_workflow",
+    raise_exception=True
+)
 def open_file(request):
 
     try:
@@ -362,6 +409,11 @@ def open_file(request):
             }
 
         )
+
+@permission_required(
+    "accounts.edit_workflow",
+    raise_exception=True
+)
 def edit_file(request):
 
     body = json.loads(

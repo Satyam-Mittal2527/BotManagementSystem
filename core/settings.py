@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "BotManagement",
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -122,3 +123,16 @@ BOT_STORAGE_PATH = "/home/satyammittal/SanimaBots"
 DELETED_BOT_STORAGE_PATH = "/home/satyammittal/SanimaDeletedBots"
 WORKFLOW_STORAGE_PATH = "/home/satyammittal/WorkflowStorage"
 DELETED_WORKFLOW_PATH = "/home/satyammittal/DeletedWorkflowFolder"
+
+
+
+
+LOGIN_URL = "/login/"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/login/"
+
+
+SESSION_COOKIE_AGE = 1800
+
+SESSION_SAVE_EVERY_REQUEST = True
+

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from bot.bank_bot import Database
 from bot.bank_bot import Bot
 from django.http import JsonResponse, HttpResponse
@@ -8,13 +8,21 @@ import os
 import shutil
 from django.conf import settings
 from openpyxl import Workbook
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def home(request):
-    return render(request, "bot_dashboard.html")
+    return render(request, "bot_page.html")
+
+@permission_required("accounts.create_bot", raise_exception=True)
 def addBot(request):
     # print("Got called add_bot page")
     return render(request,"add_bot.html")
+
+@permission_required("accounts.view_bot", raise_exception=True)
 def botPage(request):
     bot = Database()
 
@@ -34,6 +42,9 @@ def botPage(request):
         "bot_page.html",
         context
     )
+
+
+@permission_required("accounts.delete_bot", raise_exception=True)
 def DeleteBotPage(request):
     deleted_path = settings.DELETED_BOT_STORAGE_PATH
 
@@ -52,6 +63,8 @@ def DeleteBotPage(request):
     }
 
     return render(request, "deleted_bots.html", context)
+
+@permission_required("accounts.view_bot", raise_exception=True)
 def ViewBotCode(request):
 
     try:
@@ -86,6 +99,7 @@ def ViewBotCode(request):
                 "error": str(e)
             }
         )
+@permission_required("accounts.view_bot", raise_exception=True)
 def ViewFile(request):
 
     try:
@@ -134,8 +148,13 @@ def ViewFile(request):
         )
 def profilePage(request):
     return render(request, "profile.html")
+
+@permission_required("accounts.edit_bot", raise_exception=True)  
 def EditBotPage(request):
     return render(request, "EditBot.html")
+
+
+@permission_required("accounts.manage_users", raise_exception=True)
 def UserPage(request):
     bots = Database()
 
@@ -145,6 +164,9 @@ def UserPage(request):
        "values" : BotsTable
     }
     return render(request, "users.html", context)
+
+
+@permission_required("accounts.edit_bot", raise_exception=True)
 def EditBot(request):
 
     bot = Database()
@@ -199,7 +221,7 @@ def EditBot(request):
             }
         )
 
-
+@permission_required("accounts.create_bot", raise_exception=True)
 def NewBot(request):
 
     try:
@@ -322,8 +344,13 @@ def NewBot(request):
                 "status": "Error",
                 "description": str(e)
             }
-        )
+      )
+@permission_required(
+    "accounts.run_bot",
+    raise_exception=True
+)
 def runBot(request):
+    print("Current user:", request.user)
     if request.method == "POST":
         data = json.loads(request.body)
 
@@ -333,6 +360,10 @@ def runBot(request):
         # print(type(response))
         # print(response)
         return JsonResponse(response)
+@permission_required(
+    "accounts.stop_bot",
+    raise_exception=True
+)
 def stopBot(request):
     try:
         if request.method == 'POST':
@@ -351,7 +382,7 @@ def stopBot(request):
             "status": "error",
             "desciption": str(e)
         })
-
+@permission_required("accounts.view_bot", raise_exception=True)
 def botRunDetails(request, botId):
     # print("botId",botId)
     dataBase = Database()
@@ -359,6 +390,10 @@ def botRunDetails(request, botId):
     response = dataBase.view_runs(botId)
     return render(request,"botDetails.html", response)
 
+@permission_required(
+    "accounts.view_logs",
+    raise_exception=True
+)
 def logDetails(request, runId):
     dataBase = Database()
 
@@ -367,6 +402,8 @@ def logDetails(request, runId):
     response["runId"] = runId
 
     return render(request, "logDetails.html", response)
+
+@permission_required("accounts.delete_bot", raise_exception=True)
 def DeleteBot(request):
     try:
         bot_name = request.POST["bot_name"]
@@ -415,7 +452,7 @@ def DeleteBot(request):
             "description" : str(e)
         })
 
-
+@permission_required("accounts.view_logs", raise_exception=True)
 def ExportLogs(request, run_id):
 
     db = Database()
@@ -459,15 +496,17 @@ def ExportLogs(request, run_id):
 
     return response
 
-async def workflowPage(request):
+def workflowPage(request):
 
-    async with httpx.AsyncClient() as client:
-        response = await client.get(
-            "http://127.0.0.1:8000/workflow/list/"
-        )
+    response = httpx.get(
+        "http://127.0.0.1:8000/workflow/list/"
+    )
 
-    workflows = response.json()
-    # print("workflow:", workflows)
+    try:
+        workflows = response.json()
+    except:
+        workflows = []
+
     return render(
         request,
         "workflow_page.html",
@@ -558,3 +597,43 @@ def DeletedWorkflowPage(request):
     }
 
     return render(request, "deleted_workflow.html", context)
+
+
+def LoginPage(request):
+
+    if request.method == "POST":
+
+        username = request.POST["username"]
+        password = request.POST["password"]
+
+        user = authenticate(
+            request,
+            username=username,
+            password=password
+        )
+
+        if user is not None:
+
+            login(request, user)
+
+            return redirect("/")
+
+        return render(
+            request,
+            "login.html",
+            {
+                "error": "Invalid username or password"
+            }
+        )
+
+    return render(
+        request,
+        "login.html"
+    )
+
+
+def LogoutPage(request):
+
+    logout(request)
+
+    return redirect("/login")
