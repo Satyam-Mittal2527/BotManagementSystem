@@ -20,13 +20,13 @@ def home(request):
 
 @permission_required("accounts.create_bot", raise_exception=True)
 def addBot(request):
-    # print("Got called add_bot page")
+   
     return render(request,"add_bot.html")
 
 @permission_required("accounts.view_bot", raise_exception=True)
 def botPage(request):
     bot = Database()
-
+    
     bots = bot.get_bots()
 
     active_bots = bot.get_active_bots()
@@ -37,7 +37,7 @@ def botPage(request):
         "activeBots": active_bots,
         "inactiveBots": inactive_bots
     }
-    # print("CONTEXT",context)
+
     return render(
         request,
         "bot_page.html",
