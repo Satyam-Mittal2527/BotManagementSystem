@@ -389,19 +389,22 @@ class Bot:
                 "description": str(e)
             }
     def stop_bot(self, botPack):
-        # print("bankVbot stop call")
+        print("bankVbot stop call")
         botId = botPack["botId"]
         try:
             bot = self.database.get_bot_toRun(botId)
             
             pid = bot["pid"]
-            # print("Pid found",pid)
+            print("Pid found",pid)
 
            
+            try:
+                process = psutil.Process(pid)
+                process.terminate()
+            except Exception as e:
+                print(str(e))
+            print("Process Terminatewd")
             
-            process = psutil.Process(pid)
-            process.terminate()
-            # print("Process Terminatewd")
             updateBot = self.database.updateColumns(
                 botId,
                 pid,

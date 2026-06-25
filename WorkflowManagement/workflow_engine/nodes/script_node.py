@@ -37,6 +37,8 @@ class ScriptNode:
         )
 
         namespace = context.copy()
+        print("SCRIPT PATH =", repr(script_path))
+        print("SCRIPT CONTENT =", repr(self.data.get("script_content")))
 
         with open(
 

@@ -1,19 +1,22 @@
 from django.db import models
 import mysql.connector
 from datetime import datetime
+from dotenv import load_dotenv
+import os
 
-import mysql.connector
+
+load_dotenv()
     
 class DatabaseModule:
     def __init__(self):
        pass
     def get_connection(self):
         return mysql.connector.connect(
-            host="localhost",
-            port=3306,
-            user="root",
-            password="1Satyam112@",
-            database="sanima_bot"
+            host = os.getenv('DATABASE_HOST'),
+            port = os.getenv('DATABASE_PORT'),
+            user = os.getenv('DATABASE_USER'),
+            password = os.getenv('DATABASE_PASSWORD'),
+            database = os.getenv('DATABASE_NAME')
         )
     def insert_bot(self, package):
         conn = self.get_connection()

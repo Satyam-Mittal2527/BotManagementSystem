@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 # Quick-start development settings - unsuitable for production
@@ -118,12 +123,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
-BOT_STORAGE_PATH = "/home/satyammittal/SanimaBots"
-DELETED_BOT_STORAGE_PATH = "/home/satyammittal/SanimaDeletedBots"
-WORKFLOW_STORAGE_PATH = "/home/satyammittal/WorkflowStorage"
-DELETED_WORKFLOW_PATH = "/home/satyammittal/DeletedWorkflowFolder"
-
+BOT_STORAGE_PATH = os.getenv('BOT_STORAGE_PATH')
+DELETED_BOT_STORAGE_PATH = os.getenv('DELETED_BOT_STORAGE_PATH')
+WORKFLOW_STORAGE_PATH = os.getenv('WORKFLOW_STORAGE_PATH')
+DELETED_WORKFLOW_PATH = os.getenv('DELETED_WORKFLOW_PATH')
 
 
 

@@ -68,7 +68,7 @@ class WorkflowService:
 
             )
 
-            # node["data"]["script_path"] = script_path
+            node["data"]["script_path"] = script_path
             # print(node_id)
             # print(node["data"]["script_path"])
 
@@ -114,7 +114,7 @@ class WorkflowService:
         workflow_id
 
     ):
-        # print("WorkflowID_fromservice:", workflow_id)
+        print("WorkflowID_fromservice:", workflow_id)
         workflow = self.database.get_workflow(
 
             workflow_id
